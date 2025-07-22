@@ -1,0 +1,16 @@
+flutter_native_splash:
+# IOS & Android below 12
+
+  color: "#ffffff"
+  # background_image: assets/images/Splash.png
+  # background_image_dark: assets/images/SplashBlack.png
+
+  # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
+  # the leading # character.
+
+  # The image parameter allows you to specify an image used in the splash screen.  It must be a
+  # png file and should be sized for 4x pixel density.
+  image: assets/images/Splash.png
+  image_dark: assets/images/SplashBlack.png 
+
+  
