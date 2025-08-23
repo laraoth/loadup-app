@@ -14,14 +14,23 @@ class GovernoratesRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, GovernoratesModel>> getgovernorates(
-      {int page = 1}) async {
+  Future<Either<Failure, GovernoratesModel>> getgovernorates({
+    int page = 1,
+    int perPage = 10,
+    String? search,
+    String? sortBy,
+    String? sortOrder,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final governoratesresponse =
-            await governoratesRemoteDataSource.getgovernorates(page: page);
-
-        return Right(governoratesresponse);
+        final response = await governoratesRemoteDataSource.getgovernorates(
+          page: page,
+          perPage: perPage,
+          search: search,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+        );
+        return Right(response);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
       } catch (e) {

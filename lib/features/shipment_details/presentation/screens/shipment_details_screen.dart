@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:loadup/core/helpers/spacing.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
 import 'package:loadup/features/shipment_details/presentation/widgets/detail_Item_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ShipmentDetailsScreen extends StatefulWidget {
   const ShipmentDetailsScreen({Key? key}) : super(key: key);
@@ -49,16 +49,19 @@ class _ShipmentDetailsScreenState extends State<ShipmentDetailsScreen> {
             } else if (state is SentShipmentsSuccess) {
               final shipment = state.shipmentsModel.data.first;
 
-              // Parse QR code to get shipment code
-              final qrData = jsonDecode(shipment.qrCode ?? '{}');
-              final shipmentCode = qrData['shipment_code'] ?? '';
+              // النص كامل مثل ما رجع من API
+              final qrRawString = shipment.qrCode ?? '{}';
 
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DetailItemWidget(
-                        title: 'Shipment Code', value: shipmentCode),
+                        title: 'Shipment id',
+                        value: shipment.id.toString() ?? ''),
+                    DetailItemWidget(
+                        title: 'Shipment Code',
+                        value: jsonDecode(qrRawString)['shipment_code'] ?? ''),
                     DetailItemWidget(
                         title: 'Status', value: shipment.status ?? ''),
                     DetailItemWidget(
@@ -87,8 +90,18 @@ class _ShipmentDetailsScreenState extends State<ShipmentDetailsScreen> {
                     ),
                     DetailItemWidget(
                       title: 'Created At',
-                      value: shipment.createdAt.toString() ?? '',
+                      value: shipment.createdAt.toString(),
                     ),
+                    verticalSpace(20),
+                    Center(
+                      child: QrImageView(
+                        data: qrRawString,
+                        version: QrVersions.auto,
+                        size: 250.0,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    verticalSpace(20),
                     Center(
                       child: Container(
                         decoration: BoxDecoration(
@@ -104,7 +117,9 @@ class _ShipmentDetailsScreenState extends State<ShipmentDetailsScreen> {
                           ],
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // هون ممكن تحط أي أكشن لفتح الخريطة مثلاً
+                          },
                           icon: Icon(
                             Icons.location_pin,
                             size: 40,
@@ -113,7 +128,7 @@ class _ShipmentDetailsScreenState extends State<ShipmentDetailsScreen> {
                         ),
                       ),
                     ),
-                    verticalSpace(10),
+                    verticalSpace(20),
                   ],
                 ),
               );

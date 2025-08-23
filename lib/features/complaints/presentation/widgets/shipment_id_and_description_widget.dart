@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
-import 'package:loadup/core/helpers/extentions.dart';
 import 'package:loadup/core/helpers/spacing.dart';
 import 'package:loadup/core/public_widgets/button_widget.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/core/public_widgets/text_field_widget.dart';
-import 'package:loadup/core/routing/routes.dart';
-import 'package:loadup/features/auth/logic/cubit/login_cubit.dart';
-import 'package:loadup/features/auth/logic/cubit/login_state.dart';
+import 'package:loadup/features/complaints/logic/cubit/create_complaints_cubit.dart';
+import 'package:loadup/features/my_shipping/logic/cubit/received_shipments_cubit.dart';
 
 class ShipmentIdAndDescriptionWidget extends StatefulWidget {
   const ShipmentIdAndDescriptionWidget({super.key});
@@ -25,9 +22,10 @@ class _ShipmentIdAndDescriptionWidgetState
   bool isVisible = false;
   @override
   Widget build(BuildContext context) {
-    final loginCubit = context.read<LoginCubit>();
+    final createcomplaintCubit = context.read<CreateComplaintsCubit>();
+    final receivedShipmentsCubit = context.read<ReceivedShipmentsCubit>();
     return Form(
-        key: loginCubit.formKey,
+        key: createcomplaintCubit.formKey,
         child: Column(
           children: [
             Text(
@@ -35,16 +33,68 @@ class _ShipmentIdAndDescriptionWidgetState
               style: AppTextStyles.font14GreyRegular,
             ),
             TextFieldWidget(
-              controller: loginCubit.emailController,
+              controller: createcomplaintCubit.shipmentidController,
               hintText: 'Enter your shipment id',
               labelText: 'Enter your shipment id',
               obscureText: false,
+              readOnly: true,
+              onTap: () async {
+                final receivedShipmentsCubit =
+                    context.read<ReceivedShipmentsCubit>();
+                if (receivedShipmentsCubit.state is! ReceivedShipmentsSuccess) {
+                  receivedShipmentsCubit.getreceivedshipments();
+                }
+
+                showModalBottomSheet(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                    value: receivedShipmentsCubit,
+                    child: BlocBuilder<ReceivedShipmentsCubit,
+                        ReceivedShipmentsState>(
+                      builder: (context, state) {
+                        if (state is ReceivedShipmentsLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (state is ReceivedShipmentsSuccess) {
+                          return SizedBox(
+                            height: 400,
+                            child: ListView.builder(
+                              itemCount: state.shipmentsModel.data.length,
+                              itemBuilder: (context, index) {
+                                final shipment =
+                                    state.shipmentsModel.data[index];
+                                return ListTile(
+                                  title: Text(shipment.id.toString()),
+                                  onTap: () {
+                                    // تعيين الـ id المختار في الكيوبت
+                                    createcomplaintCubit.selectShipmentId(
+                                        shipment.id!); // id هنا
+
+                                    // تحديث النص في TextField لعرض الكود
+                                    createcomplaintCubit.shipmentidController
+                                        .text = shipment.id.toString();
+
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: Text("No shipments found"));
+                        }
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
             verticalSpace(24),
             SizedBox(
               height: 150.h,
               child: TextFieldWidget(
-                controller: loginCubit.passwordController,
+                controller: createcomplaintCubit.shipmentdescriptionController,
                 hintText:
                     'Please describe the issue you faced\nwith this shipment...',
                 labelText:
@@ -53,32 +103,34 @@ class _ShipmentIdAndDescriptionWidgetState
               ),
             ),
             verticalSpace(40),
-            BlocConsumer<LoginCubit, LoginState>(
+            BlocConsumer<CreateComplaintsCubit, CreateComplaintsState>(
               listener: (context, state) {
-                if (state is LoginSuccess) {
+                if (state is CreateComplaintsSuccess) {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text(state.message)));
                   // context.pushNamed(Routes.customBottomNavigationBar);
-                } else if (state is LoginError) {
+                } else if (state is CreateComplaintsError) {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text(state.error)));
                 }
               },
               builder: (context, state) {
-                if (state is LoginLoading) {
+                if (state is CreateComplaintsLoading) {
                   return LoadingWidget();
                 } else {
                   return ButtonWidget(
                       title: "Send",
                       onTap: () {
                         if (context
-                            .read<LoginCubit>()
+                            .read<CreateComplaintsCubit>()
                             .formKey
                             .currentState!
                             .validate()) {
-                          context.read<LoginCubit>().login();
+                          context
+                              .read<CreateComplaintsCubit>()
+                              .createcomplaint();
                         }
                       },
                       textStyle: AppTextStyles.font24WhiteBold);

@@ -15,6 +15,8 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final void Function()? onPressedSuffixIcon;
   final void Function()? onPressedPrefixIcon;
+  final bool readOnly; // جديد
+  final void Function()? onTap; // جديد
 
   const TextFieldWidget({
     super.key,
@@ -29,6 +31,8 @@ class TextFieldWidget extends StatelessWidget {
     this.keyboardType,
     this.onPressedSuffixIcon,
     this.onPressedPrefixIcon,
+    this.readOnly = false, // افتراضي false
+    this.onTap, // افتراضي null
   });
 
   @override
@@ -47,6 +51,8 @@ class TextFieldWidget extends StatelessWidget {
         ],
       ),
       child: TextFormField(
+        readOnly: readOnly, // مضاف
+        onTap: onTap, // مضاف
         keyboardType: keyboardType,
         cursorColor: AppColors.primaryOrange,
         validator: (value) => value!.isEmpty ? 'Can\'t Be Empty' : null,

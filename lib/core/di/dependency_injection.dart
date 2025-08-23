@@ -13,10 +13,16 @@ import 'package:loadup/features/auth/logic/cubit/login_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/logout_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_cubit.dart';
 import 'package:loadup/features/complaints/data/datasources/complaints_remote_data_source.dart';
+import 'package:loadup/features/complaints/data/datasources/create_complaint_remote_data_source.dart';
+import 'package:loadup/features/complaints/data/datasources/delete_complaint_remote_data_source.dart';
 import 'package:loadup/features/complaints/data/datasources/update_complaint_remote_data_source.dart';
 import 'package:loadup/features/complaints/data/repos/complaints_repo.dart';
+import 'package:loadup/features/complaints/data/repos/create_complaint_repo.dart';
+import 'package:loadup/features/complaints/data/repos/delete_complaint_repo.dart';
 import 'package:loadup/features/complaints/data/repos/update_complaint_repo.dart';
 import 'package:loadup/features/complaints/logic/cubit/complaints_cubit.dart';
+import 'package:loadup/features/complaints/logic/cubit/create_complaints_cubit.dart';
+import 'package:loadup/features/complaints/logic/cubit/delete_complaint_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/update_complaint_cubit.dart';
 import 'package:loadup/features/create_shipment/data/datasource/centers_remote_data_source.dart';
 import 'package:loadup/features/create_shipment/data/datasource/governorates_remote_data_source.dart';
@@ -238,5 +244,30 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<UpdateComplaintsRepo>(
     () => UpdateComplaintsRepo(
         networkInfo: getIt(), updateComplaintsRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<CreateComplaintsCubit>(
+    () => CreateComplaintsCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<CreateComplaintsRemoteDataSource>(
+    () => CreateComplaintsRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<CreateComplaintRepo>(
+    () => CreateComplaintRepo(
+        networkInfo: getIt(), createComplaintsRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<DeleteComplaintCubit>(
+      () => DeleteComplaintCubit(getIt()));
+
+  getIt.registerLazySingleton<DeleteComplaintRemoteDataSource>(
+    () => DeleteComplaintRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<DeleteComplaintRepo>(
+    () => DeleteComplaintRepo(
+        networkInfo: getIt(), deleteComplaintRemoteDataSource: getIt()),
   );
 }

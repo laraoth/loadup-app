@@ -5,8 +5,10 @@ import 'package:loadup/features/create_shipment/data/models/governorates_model.d
 import 'package:loadup/features/create_shipment/logic/cubit/governorates_cubit.dart';
 
 class GovernorateSelectionScreen extends StatefulWidget {
-  const GovernorateSelectionScreen({Key? key, required bool isOrigin})
+  const GovernorateSelectionScreen({Key? key, required this.isOrigin})
       : super(key: key);
+
+  final bool isOrigin;
 
   @override
   State<GovernorateSelectionScreen> createState() =>
@@ -23,57 +25,81 @@ class _GovernorateSelectionScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Choose the governorate')),
-      body: BlocBuilder<GovernoratesCubit, GovernoratesState>(
-        builder: (context, state) {
-          if (state is GovernoratesLoading) {
-            return LoadingWidget();
-          } else if (state is GovernoratesSuccess) {
-            final governoratesCubit = context.read<GovernoratesCubit>();
-            final List<GovernorateDatum> governorates =
-                state.governoratesModel.data;
+    final cubit = context.read<GovernoratesCubit>();
 
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: governorates.length,
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final item = governorates[index];
-                      return ListTile(
-                        title: Text(item.name),
-                        onTap: () {
-                          Navigator.pop(context, item);
-                        },
-                      );
-                    },
-                  ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Choose the Governorate')),
+      body: Column(
+        children: [
+          // 🔍 مربع البحث
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: cubit.searchController,
+              decoration: InputDecoration(
+                hintText: "Search governorates...",
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    cubit
+                        .searchGovernorates(cubit.searchController.text.trim());
+                  },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: governoratesCubit.currentPage > 1
-                          ? () => governoratesCubit.previousPage()
-                          : null,
-                      child: const Text("pre"),
-                    ),
-                    Text("page ${governoratesCubit.currentPage}"),
-                    TextButton(
-                      onPressed: () => governoratesCubit.nextPage(),
-                      child: const Text("next"),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          } else if (state is GovernoratesError) {
-            return Center(child: Text(state.error));
-          }
-          return const SizedBox.shrink();
-        },
+              ),
+              onSubmitted: (value) {
+                cubit.searchGovernorates(value.trim());
+              },
+            ),
+          ),
+
+          Expanded(
+            child: BlocBuilder<GovernoratesCubit, GovernoratesState>(
+              builder: (context, state) {
+                if (state is GovernoratesLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is GovernoratesSuccess) {
+                  final governorates = state.governoratesModel.data;
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: governorates.length,
+                          separatorBuilder: (_, __) => const Divider(),
+                          itemBuilder: (context, index) {
+                            final item = governorates[index];
+                            return ListTile(
+                              title: Text(item.name),
+                              onTap: () => Navigator.pop(context, item),
+                            );
+                          },
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: cubit.currentPage > 1
+                                ? cubit.previousPage
+                                : null,
+                            child: const Text("Previous"),
+                          ),
+                          Text("Page ${cubit.currentPage}"),
+                          TextButton(
+                            onPressed: cubit.nextPage,
+                            child: const Text("Next"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                } else if (state is GovernoratesError) {
+                  return Center(child: Text(state.error));
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

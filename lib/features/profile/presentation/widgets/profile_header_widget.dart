@@ -4,21 +4,27 @@ import 'package:loadup/core/constant/text_styles.dart';
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
   final String email;
+  final String? profilePhotoUrl; // ✅ أضفنا
 
   const ProfileHeaderWidget({
     super.key,
     required this.name,
     required this.email,
+    this.profilePhotoUrl,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 70,
           backgroundColor: Colors.grey,
-          child: Icon(Icons.person, size: 120, color: Colors.white),
+          backgroundImage:
+              profilePhotoUrl != null ? NetworkImage(profilePhotoUrl!) : null,
+          child: profilePhotoUrl == null
+              ? const Icon(Icons.person, size: 120, color: Colors.white)
+              : null,
         ),
         const SizedBox(height: 12),
         Text(name, style: AppTextStyles.font18BlackBold),

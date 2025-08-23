@@ -211,7 +211,7 @@ class CrudDio {
     }
   }
 
-  Future<Either<Failure, List>> dioDeleteMethod({
+  Future<Either<Failure, Map<String, dynamic>>> dioDeleteMethod({
     required String endPoint,
     @required Map? data,
     @required String? token,
@@ -234,6 +234,7 @@ class CrudDio {
           queryParameters: queryParameters,
         );
       }
+
       var response = await dio.delete(
         endPoint,
         data: data,
@@ -242,9 +243,10 @@ class CrudDio {
           headers: headers,
         ),
       );
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        List responsebody = response.data;
-        return Right(responsebody);
+        Map<String, dynamic> responseBody = response.data;
+        return Right(responseBody);
       } else {
         String errorMessage =
             'Request failed\nStatus Code: ${response.statusCode}\nResponse: ${response.data}';

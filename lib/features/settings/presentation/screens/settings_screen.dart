@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/localization/app_localizations.dart';
 import 'package:loadup/features/settings/presentation/widgets/appearance_and_language_and_notification_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.pureWhite,
         title: Text(
-          'Settings',
+          AppLocalizations.of(context).translate("settings"),
           style: AppTextStyles.font24BlackBold,
         ),
       ),
@@ -28,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             children: [
               verticalSpace(24),
-              AppearanceAndLanguageAndNotificationWidget(),
+              const AppearanceAndLanguageAndNotificationWidget(),
             ],
           ),
         ),

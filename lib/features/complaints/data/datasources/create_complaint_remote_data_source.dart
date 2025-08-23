@@ -3,27 +3,27 @@ import 'package:loadup/core/networking/crud_dio.dart';
 import 'package:loadup/core/networking/error/exceptions.dart';
 import 'package:loadup/features/complaints/data/models/create_complains_request_model.dart';
 import 'package:loadup/features/complaints/data/models/create_complains_response_model.dart';
+import 'package:loadup/main.dart';
 
 abstract class CreateComplaintsRemoteDataSource {
   Future<CreateComplaintsResponseModel> createcomplaints(
       CreateComplaintsRequestModel createcomplaints);
 }
 
-class SendComplaintsRemoteDataSourceImp
+class CreateComplaintsRemoteDataSourceImp
     implements CreateComplaintsRemoteDataSource {
   final CrudDio dio;
 
-  SendComplaintsRemoteDataSourceImp({required this.dio});
+  CreateComplaintsRemoteDataSourceImp({required this.dio});
 
   @override
   Future<CreateComplaintsResponseModel> createcomplaints(
       CreateComplaintsRequestModel createcomplaints) async {
-    final result = await dio
-        .dioPostMethod(endPoint: AppLinkUrl.sendcomplaints, token: '', data: {
-      'shipment_id': createcomplaints.shipmentId,
-      'customer_id': createcomplaints.customerId,
-      'description': createcomplaints.description,
-    }, queryParameters: {});
+    final result = await dio.dioPostMethod(
+        endPoint: AppLinkUrl.sendcomplaints,
+        token: storage.getString('token'),
+        data: createcomplaints.toJson(),
+        queryParameters: {});
 
     return result.fold(
       (fail) => throw ServerException(fail.message),

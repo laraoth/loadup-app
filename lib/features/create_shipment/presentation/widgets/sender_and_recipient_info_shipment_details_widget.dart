@@ -8,8 +8,6 @@ import 'package:loadup/core/public_widgets/text_field_widget.dart';
 import 'package:loadup/core/public_widgets/button_widget.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/spacing.dart';
-
-// استورد موديلاتك هنا بشكل صحيح
 import 'package:loadup/features/create_shipment/data/models/users_model.dart';
 import 'package:loadup/features/create_shipment/data/models/governorates_model.dart';
 import 'package:loadup/features/create_shipment/data/models/centers_model.dart';
@@ -31,7 +29,6 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ... حقول أخرى هنا ...
           verticalSpace(24),
           TextFieldWidget(
             controller: shipmentCubit.typeOfCargoController,
@@ -51,11 +48,10 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
           // المستلم
           GestureDetector(
             onTap: () async {
-              // استدعاء الشاشة عن طريق pushNamed وانتظار النتيجة
               final selected = await Navigator.pushNamed(
                 context,
                 Routes.userSelectionScreen,
-              ) as UserDatum?; // هنا نوع UserDatum صريح
+              ) as UserDatum?;
 
               if (selected != null) {
                 usersCubit.selectedReciverId = selected.id;

@@ -1,46 +1,56 @@
-// import 'package:bloc/bloc.dart';
-// import 'package:equatable/equatable.dart';
-// import 'package:flutter/material.dart';
-// import 'package:loadup/features/complaints/data/repos/create_complaint_repo.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:loadup/features/complaints/data/models/create_complains_request_model.dart';
+import 'package:loadup/features/complaints/data/repos/create_complaint_repo.dart';
 
-// part 'create_complaints_state.dart';
+part 'create_complaints_state.dart';
 
-// class CreateComplaintsCubit extends Cubit<CreateComplaintsState> {
-//   final CreateComplaintRepo _createComplaintRepo;
-//   CreateComplaintsCubit(this._createComplaintRepo) : super(CreateComplaintsInitial());
+class CreateComplaintsCubit extends Cubit<CreateComplaintsState> {
+  final CreateComplaintRepo _createComplaintRepo;
+  CreateComplaintsCubit(this._createComplaintRepo)
+      : super(CreateComplaintsInitial());
 
-//   final TextEditingController shipmentController = TextEditingController();
-//   final TextEditingController passwordController = TextEditingController();
-//   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController shipmentidController = TextEditingController();
+  final TextEditingController shipmentdescriptionController =
+      TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-//   void login() async {
-//     if (!formKey.currentState!.validate()) return;
+  int? selectedShipmentId;
 
-//     emit(LoginLoading());
-//     final response = await _loginRepo.login(
-//       LoginRequestBody(
-//         email: emailController.text.trim(),
-//         password: passwordController.text.trim(),
-//       ),
-//     );
+  void selectShipmentId(int id) {
+    selectedShipmentId = id;
+    shipmentidController.text = id.toString();
+    emit(CreateComplaintsInitial());
+  }
 
-//     response.fold(
-//       (fail) {
-//         if (!isClosed) emit(LoginError(fail.toString()));
-//       },
-//       (loginResponse) {
-//         if (!isClosed) {
-//           emit(
-//               LoginSuccess(loginResponse.message ?? 'Logged in successfully.'));
-//         }
-//       },
-//     );
-//   }
+  void createcomplaint() async {
+    if (!formKey.currentState!.validate() || selectedShipmentId == null) return;
 
-//   @override
-//   Future<void> close() {
-//     emailController.dispose();
-//     passwordController.dispose();
-//     return super.close();
-//   }
-// }
+    emit(CreateComplaintsLoading());
+    final response = await _createComplaintRepo.createcomplaints(
+      CreateComplaintsRequestModel(
+        shipmentId: selectedShipmentId!,
+        description: shipmentdescriptionController.text.trim(),
+      ),
+    );
+
+    response.fold(
+      (fail) {
+        if (!isClosed) emit(CreateComplaintsError(fail.toString()));
+      },
+      (createComplaintsResponse) {
+        if (!isClosed) {
+          emit(CreateComplaintsSuccess(createComplaintsResponse.message ??
+              'The complaint has been successfully submitted.'));
+        }
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    shipmentidController.dispose();
+    shipmentdescriptionController.dispose();
+    return super.close();
+  }
+}

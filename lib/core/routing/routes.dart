@@ -21,4 +21,5 @@ class Routes {
   static const String receivedShipmentsScreen = '/receivedShipmentsScreen';
   static const String complaintsViewScreen = '/complaintsViewScreen';
   static const String complaintsScreenSelector = '/complaintsScreenSelector';
+  static const String mapScreen = '/mapScreen';
 }

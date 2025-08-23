@@ -4,6 +4,7 @@ import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/spacing.dart';
 import 'package:loadup/features/complaints/logic/cubit/complaints_cubit.dart';
+import 'package:loadup/features/complaints/logic/cubit/delete_complaint_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/update_complaint_cubit.dart';
 
 class ComplaintsListWidget extends StatelessWidget {
@@ -31,6 +32,7 @@ class ComplaintsListWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final complaint = complaints[index];
                   final updateCubit = context.read<UpdateComplaintsCubit>();
+                  final deleteCubit = context.read<DeleteComplaintCubit>();
 
                   return Container(
                     padding: const EdgeInsets.all(12),
@@ -41,78 +43,115 @@ class ComplaintsListWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        /// العنوان + زر التعديل + زر الحذف
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Shipment ID: ${complaint.shipmentId}",
-                                style: AppTextStyles.font16BlackRegular),
-                            IconButton(
-                              icon: const Icon(Icons.edit, size: 20),
-                              onPressed: () {
-                                updateCubit
-                                    .descriptionController.text = complaint
-                                        .description ??
-                                    ''; 
+                            Text(
+                              "Shipment ID: ${complaint.shipmentId}",
+                              style: AppTextStyles.font16BlackRegular,
+                            ),
+                            Row(
+                              children: [
+                                /// زر التعديل
+                                IconButton(
+                                  icon: const Icon(Icons.edit, size: 20),
+                                  onPressed: () {
+                                    updateCubit.descriptionController.text =
+                                        complaint.description ?? '';
 
-                                showDialog(
-                                  context: context,
-                                  builder: (dialogContext) {
-                                    return AlertDialog(
-                                      title: const Text('Edit Complaint'),
-                                      content: Form(
-                                        key: updateCubit.formKey,
-                                        child: TextFormField(
-                                          controller:
-                                              updateCubit.descriptionController,
-                                          maxLines: 3,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.trim().isEmpty) {
-                                              return 'Description can\'t be empty';
-                                            }
-                                            return null;
-                                          },
-                                          decoration: const InputDecoration(
-                                            labelText: 'Description',
-                                            border: OutlineInputBorder(),
+                                    showDialog(
+                                      context: context,
+                                      builder: (dialogContext) {
+                                        return AlertDialog(
+                                          title: const Text('Edit Complaint'),
+                                          content: Form(
+                                            key: updateCubit.formKey,
+                                            child: TextFormField(
+                                              controller: updateCubit
+                                                  .descriptionController,
+                                              maxLines: 3,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.trim().isEmpty) {
+                                                  return 'Description can\'t be empty';
+                                                }
+                                                return null;
+                                              },
+                                              decoration: const InputDecoration(
+                                                labelText: 'Description',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(dialogContext).pop(),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            final success = await updateCubit
-                                                .updatecomplaints(complaint.id);
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(dialogContext)
+                                                      .pop(),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                final success =
+                                                    await updateCubit
+                                                        .updatecomplaints(
+                                                            complaint.id);
 
-                                            if (success) {
-                                             
-                                              Navigator.of(dialogContext).pop();
-                                              context
-                                                  .read<ComplaintsCubit>()
-                                                  .getcomplaints();
-                                            } else {
-                                             
-                                              ScaffoldMessenger.of(
-                                                      dialogContext)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                        'Failed to update complaint')),
-                                              );
-                                            }
-                                          },
-                                          child: const Text('Update'),
-                                        ),
-                                      ],
+                                                if (success) {
+                                                  Navigator.of(dialogContext)
+                                                      .pop();
+                                                  context
+                                                      .read<ComplaintsCubit>()
+                                                      .getcomplaints();
+                                                } else {
+                                                  ScaffoldMessenger.of(
+                                                          dialogContext)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Failed to update complaint')),
+                                                  );
+                                                }
+                                              },
+                                              child: const Text('Update'),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
+                                ),
+
+                                /// زر الحذف
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      size: 20, color: Colors.red),
+                                  onPressed: () async {
+                                    final success = await deleteCubit
+                                        .deleteComplaint(complaint.id);
+
+                                    if (success) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Complaint deleted successfully')),
+                                      );
+                                      context
+                                          .read<ComplaintsCubit>()
+                                          .getcomplaints();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Failed to delete complaint')),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),

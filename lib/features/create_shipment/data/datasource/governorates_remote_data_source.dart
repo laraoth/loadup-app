@@ -9,7 +9,13 @@ import 'package:loadup/features/create_shipment/data/models/shipment_response_mo
 import 'package:loadup/main.dart';
 
 abstract class GovernoratesRemoteDataSource {
-  Future<GovernoratesModel> getgovernorates({int page = 1});
+  Future<GovernoratesModel> getgovernorates({
+    int page,
+    int perPage,
+    String? search,
+    String? sortBy,
+    String? sortOrder,
+  });
 }
 
 class GovernoratesRemoteDataSourceImp implements GovernoratesRemoteDataSource {
@@ -18,23 +24,28 @@ class GovernoratesRemoteDataSourceImp implements GovernoratesRemoteDataSource {
   GovernoratesRemoteDataSourceImp({required this.dio});
 
   @override
-  Future<GovernoratesModel> getgovernorates({int page = 1}) async {
+  Future<GovernoratesModel> getgovernorates({
+    int page = 1,
+    int perPage = 10,
+    String? search,
+    String? sortBy = "name",
+    String? sortOrder = "asc",
+  }) async {
     final result = await dio.dioGetMethod(
       endPoint: AppLinkUrl.getgovernorates,
       token: storage.getString('token'),
       queryParameters: {
-        "page": 1,
-        "per_page": 10,
-        "search": "",
-        "sort_by": "name",
-        "sort_order": "asc",
+        "page": page,
+        "per_page": perPage,
+        if (search != null && search.isNotEmpty) "search": search,
+        if (sortBy != null) "sort_by": sortBy,
+        if (sortOrder != null) "sort_order": sortOrder,
       },
     );
 
     return result.fold(
       (fail) => throw ServerException(fail.message),
-      (governoratesResponse) =>
-          GovernoratesModel.fromJson(governoratesResponse),
+      (response) => GovernoratesModel.fromJson(response),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:loadup/features/auth/logic/cubit/login_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/logout_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/complaints_cubit.dart';
+import 'package:loadup/features/complaints/logic/cubit/create_complaints_cubit.dart';
+import 'package:loadup/features/complaints/logic/cubit/delete_complaint_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/update_complaint_cubit.dart';
 import 'package:loadup/features/complaints/presentation/screens/complaints_screen.dart';
 import 'package:loadup/features/complaints/presentation/screens/complaints_screen_selector.dart';
@@ -33,6 +35,7 @@ import 'package:loadup/features/my_shipping/presentation/screens/sent_shipments_
 import 'package:loadup/features/reset_password/logic/cubit/reset_password_cubit.dart';
 import 'package:loadup/features/reset_password/presentation/screens/reset_password_screen.dart';
 import 'package:loadup/features/settings/presentation/screens/settings_screen.dart';
+import 'package:loadup/features/shipment_details/presentation/screens/map_screen.dart';
 import 'package:loadup/features/shipment_details/presentation/screens/shipment_details_screen.dart';
 import 'package:loadup/features/wallet/presentation/screens/wallet_screen.dart';
 
@@ -44,6 +47,10 @@ class AppRouter {
       case Routes.getStartedScreen:
         return MaterialPageRoute(
           builder: (_) => GetStartedScreen(),
+        );
+      case Routes.mapScreen:
+        return MaterialPageRoute(
+          builder: (_) => MapScreen(),
         );
       case Routes.loginScreen:
         return MaterialPageRoute(
@@ -99,13 +106,19 @@ class AppRouter {
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                  create: (context) =>
-                      getIt<ComplaintsCubit>()..getcomplaints()),
-              BlocProvider(create: (context) => getIt<UpdateComplaintsCubit>()),
+                create: (context) => getIt<ComplaintsCubit>()..getcomplaints(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<UpdateComplaintsCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<DeleteComplaintCubit>(),
+              ),
             ],
             child: ComplaintsViewScreen(),
           ),
         );
+
       case Routes.walletScreen:
         return MaterialPageRoute(
           builder: (_) => WalletScreen(),
@@ -117,8 +130,15 @@ class AppRouter {
         );
       case Routes.complaintsScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<LoginCubit>(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<CreateComplaintsCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<ReceivedShipmentsCubit>(),
+              ),
+            ],
             child: const ComplaintsScreen(),
           ),
         );

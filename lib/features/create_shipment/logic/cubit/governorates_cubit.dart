@@ -13,6 +13,7 @@ class GovernoratesCubit extends Cubit<GovernoratesState> {
       TextEditingController();
   final TextEditingController destinationGovernorateController =
       TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   int? selectedOriginGovernorateId;
   int? selectedDestinationGovernorateId;
@@ -20,46 +21,64 @@ class GovernoratesCubit extends Cubit<GovernoratesState> {
   int _currentPage = 1;
   int get currentPage => _currentPage;
 
-  void getgovernorates({int page = 1}) async {
+  int _perPage = 10;
+  String? _search;
+  String? _sortBy = "name";
+  String? _sortOrder = "asc";
+
+  void getgovernorates({
+    int page = 1,
+    int? perPage,
+    String? search,
+    String? sortBy,
+    String? sortOrder,
+  }) async {
     emit(GovernoratesLoading());
 
-    final response = await _governoratesRepo.getgovernorates(page: page);
+    final response = await _governoratesRepo.getgovernorates(
+      page: page,
+      perPage: perPage ?? _perPage,
+      search: search ?? _search,
+      sortBy: sortBy ?? _sortBy,
+      sortOrder: sortOrder ?? _sortOrder,
+    );
 
     response.fold(
       (fail) {
         if (!isClosed) emit(GovernoratesError(fail.toString()));
       },
-      (governoratesResponse) {
+      (res) {
         if (!isClosed) {
           _currentPage = page;
-          emit(GovernoratesSuccess(
-            governoratesResponse.message,
-            governoratesResponse,
-          ));
+          _perPage = perPage ?? _perPage;
+          _search = search ?? _search;
+          _sortBy = sortBy ?? _sortBy;
+          _sortOrder = sortOrder ?? _sortOrder;
+          emit(GovernoratesSuccess(res.message, res));
         }
       },
     );
   }
 
-  void nextPage() {
-    getgovernorates(page: _currentPage + 1);
+  void searchGovernorates(String search) {
+    _search = search;
+    getgovernorates(page: 1, search: search);
   }
 
+  void nextPage() => getgovernorates(page: _currentPage + 1);
   void previousPage() {
-    if (_currentPage > 1) {
-      getgovernorates(page: _currentPage - 1);
-    }
+    if (_currentPage > 1) getgovernorates(page: _currentPage - 1);
   }
 
-  void setSelectedOriginGovernorate(GovernorateDatum governorate) {
-    selectedOriginGovernorateId = governorate.id;
-    originGovernorateController.text = governorate.name;
+  void setSelectedOriginGovernorate(GovernorateDatum g) {
+    selectedOriginGovernorateId = g.id;
+    originGovernorateController.text = g.name;
     emit(GovernoratesSelectionUpdated());
   }
 
-  void setSelectedDestinationGovernorate(GovernorateDatum governorate) {
-    selectedDestinationGovernorateId = governorate.id;
-    destinationGovernorateController.text = governorate.name;
+  void setSelectedDestinationGovernorate(GovernorateDatum g) {
+    selectedDestinationGovernorateId = g.id;
+    destinationGovernorateController.text = g.name;
     emit(GovernoratesSelectionUpdated());
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loadup/core/localization/app_localizations.dart';
+import 'package:loadup/core/localization/localization_cubit.dart';
 
 class AppearanceAndLanguageAndNotificationWidget extends StatefulWidget {
   const AppearanceAndLanguageAndNotificationWidget({super.key});
@@ -17,17 +20,19 @@ class _AppearanceAndLanguageAndNotificationWidgetState
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> actions = [
       {
-        'title': 'appearance',
+        'title': AppLocalizations.of(context).translate("appearance"),
         'trailing': const Icon(Icons.dark_mode, color: Colors.black),
         'onTap': () {},
       },
       {
-        'title': 'language',
+        'title': AppLocalizations.of(context).translate("language"),
         'trailing': const Icon(Icons.language, color: Colors.black),
-        'onTap': () {},
+        'onTap': () {
+          _showLanguageDialog(context);
+        },
       },
       {
-        'title': 'notification',
+        'title': AppLocalizations.of(context).translate("notification"),
         'trailing': Switch(
           value: notificationsEnabled,
           onChanged: (value) {
@@ -57,7 +62,8 @@ class _AppearanceAndLanguageAndNotificationWidgetState
                   action['title'] as String,
                   style: TextStyle(fontSize: 16.sp),
                 ),
-                trailing: action['title'] == 'notification'
+                trailing: action['title'] ==
+                        AppLocalizations.of(context).translate("notification")
                     ? Switch(
                         value: notificationsEnabled,
                         onChanged: (value) {
@@ -74,6 +80,34 @@ class _AppearanceAndLanguageAndNotificationWidgetState
         }).toList(),
         SizedBox(height: 16.h),
       ],
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(AppLocalizations.of(context).translate("language")),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text("English"),
+              onTap: () {
+                context.read<LocalizationCubit>().changeLanguage("en");
+                Navigator.pop(ctx);
+              },
+            ),
+            ListTile(
+              title: const Text("العربية"),
+              onTap: () {
+                context.read<LocalizationCubit>().changeLanguage("ar");
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

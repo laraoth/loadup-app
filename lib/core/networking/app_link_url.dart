@@ -20,4 +20,6 @@ class AppLinkUrl {
   static const String sendcomplaints = '/api/complaints';
 
   static String updateComplaint(int id) => '/api/complaints/$id';
+
+  static String deleteComplaint(int id) => '/api/complaints/$id';
 }
