@@ -4,6 +4,7 @@ import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/public_widgets/button_widget.dart';
 import 'package:loadup/core/routing/routes.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 
 class ComplaintsScreenSelector extends StatelessWidget {
   const ComplaintsScreenSelector({super.key});
@@ -13,11 +14,11 @@ class ComplaintsScreenSelector extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Complaints',
-          style: AppTextStyles.font24BlackBold,
+          context.tr("complaints"),
+          style: AppTextStyles.font24Bold(context),
         ),
         centerTitle: true,
-        backgroundColor: AppColors.lightBackground,
+        backgroundColor: AppColors.background(context),
         foregroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -29,7 +30,7 @@ class ComplaintsScreenSelector extends StatelessWidget {
           children: [
             SizedBox(height: 32.h),
             ButtonWidget(
-              title: 'View My Complaints',
+              title: context.tr("my_complaints"),
               onTap: () {
                 Navigator.pushNamed(context, Routes.complaintsViewScreen);
               },
@@ -42,7 +43,7 @@ class ComplaintsScreenSelector extends StatelessWidget {
             ),
             SizedBox(height: 35.h),
             ButtonWidget(
-              title: 'Submit a Complaint',
+              title: context.tr("submit_complaint"),
               onTap: () {
                 Navigator.pushNamed(context, Routes.complaintsScreen);
               },

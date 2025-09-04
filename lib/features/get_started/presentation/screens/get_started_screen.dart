@@ -5,6 +5,7 @@ import 'package:loadup/core/constant/images.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/extentions.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/core/public_widgets/button_widget.dart';
 import 'package:loadup/core/routing/routes.dart';
 
@@ -37,9 +38,9 @@ class GetStartedScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Text(
-                    "Let’s get your\nshipment moving!",
+                    context.tr("lets_get_your_shipment_moving"),
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.font32WhiteBold,
+                    style: AppTextStyles.font32Bold(context),
                   ),
                 ),
 
@@ -49,13 +50,13 @@ class GetStartedScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 80.w),
                   child: ButtonWidget(
-                    title: "Get Started",
+                    title: context.tr("get_started"),
                     onTap: () {
                       context.pushNamed(Routes.loginScreen);
                     },
                     // backgroundColor: AppColors.primaryOrange,
                     radius: 12.r,
-                    textStyle: AppTextStyles.font24WhiteBold,
+                    textStyle: AppTextStyles.font24Bold(context),
                     width: double.infinity,
                     height: 50.h,
                   ),

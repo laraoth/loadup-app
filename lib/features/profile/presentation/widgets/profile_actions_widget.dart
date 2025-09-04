@@ -6,6 +6,8 @@ import 'package:loadup/core/routing/routes.dart';
 import 'package:loadup/features/auth/logic/cubit/logout_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/logout_state.dart';
 import 'package:loadup/features/auth/presentation/widgets/logout_widget.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
+import 'package:loadup/core/constant/colors.dart';
 
 class ProfileActionsWidget extends StatelessWidget {
   const ProfileActionsWidget({super.key});
@@ -14,19 +16,19 @@ class ProfileActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> actions = [
       {
-        'title': 'Edit Profile',
+        'title': context.tr("edit_profile"),
         'onTap': () {
           context.pushNamed(Routes.editprofileScreen);
         }
       },
       {
-        'title': 'Change Password',
+        'title': context.tr("change_password"),
         'onTap': () {
           context.pushNamed(Routes.resetpasswordScreen);
         }
       },
       {
-        'title': 'Complaints',
+        'title': context.tr("complaints"),
         'onTap': () {
           context.pushNamed(Routes.complaintsScreenSelector);
         }
@@ -43,11 +45,15 @@ class ProfileActionsWidget extends StatelessWidget {
             child: Material(
               borderRadius: BorderRadius.circular(12),
               elevation: 2,
-              color: Colors.white,
+              color: AppColors.cardBackground(context),
               child: ListTile(
                 minVerticalPadding: 24.h,
-                title: Text(action['title'] as String),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                title: Text(
+                  action['title'] as String,
+                  style: TextStyle(color: AppColors.text(context)),
+                ),
+                trailing: Icon(Icons.arrow_forward_ios,
+                    size: 16, color: AppColors.icon(context)),
                 onTap: action['onTap'] as void Function()?,
               ),
             ),
@@ -58,12 +64,14 @@ class ProfileActionsWidget extends StatelessWidget {
           listener: (context, state) {
             if (state is LogoutSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out successfully')),
+                SnackBar(content: Text(context.tr("logged_out"))),
               );
               context.pushNamed(Routes.loginScreen);
             } else if (state is LogoutFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Logout failed: ${state.errorMessage}')),
+                SnackBar(
+                    content: Text(
+                        '${context.tr("logout_failed")}: ${state.errorMessage}')),
               );
             }
           },

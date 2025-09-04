@@ -14,11 +14,12 @@ class SentShipmentsRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, ShipmentsModel>> getsentshipments() async {
+  Future<Either<Failure, ShipmentsModel>> getsentshipments(
+      {String? status}) async {
     if (await networkInfo.isConnected) {
       try {
-        final getsentshipmentsResponse =
-            await sentshipmentsRemoteDataSource.getsentshipments();
+        final getsentshipmentsResponse = await sentshipmentsRemoteDataSource
+            .getsentshipments(status: status);
 
         return Right(getsentshipmentsResponse);
       } on ServerException catch (e) {

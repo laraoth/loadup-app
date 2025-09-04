@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/extentions.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/core/routing/routes.dart';
 
 import 'package:loadup/features/auth/presentation/widgets/linktext_widget.dart';
@@ -25,15 +26,15 @@ class SignUpScreen extends StatelessWidget {
               children: [
                 verticalSpace(30),
                 Text(
-                  "Create Your Account",
-                  style: AppTextStyles.font32BlackBold,
+                  context.tr("create_account"),
+                  style: AppTextStyles.font32Bold(context),
                 ),
                 verticalSpace(55),
                 UserInfoWidget(),
                 verticalSpace(55),
                 LinkTextWidget(
-                  normalText: "Already have an account? ",
-                  linkText: "Log in",
+                  normalText: context.tr("already_have_account"),
+                  linkText: context.tr("log_in"),
                   onTap: () {
                     context.pushNamed(Routes.loginScreen);
                   },

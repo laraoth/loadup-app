@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/features/create_shipment/logic/cubit/centers_cubit.dart';
 import 'package:loadup/features/create_shipment/logic/cubit/governorates_cubit.dart';
 import 'package:loadup/features/create_shipment/logic/cubit/shipment_request_cubit.dart';
@@ -30,22 +31,27 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           verticalSpace(24),
+
+          /// نوع البضاعة
           TextFieldWidget(
             controller: shipmentCubit.typeOfCargoController,
-            hintText: 'Type of Cargo',
-            labelText: 'Type of Cargo',
+            hintText: context.tr('type_of_cargo'),
+            labelText: context.tr('type_of_cargo'),
             obscureText: false,
           ),
           verticalSpace(24),
+
+          /// الوزن
           TextFieldWidget(
             controller: shipmentCubit.weightController,
-            hintText: 'Weight (KG)',
-            labelText: 'Weight (KG)',
+            hintText: context.tr('weight'),
+            labelText: context.tr('weight'),
             obscureText: false,
             keyboardType: TextInputType.number,
           ),
+          verticalSpace(24),
 
-          // المستلم
+          /// المستلم
           GestureDetector(
             onTap: () async {
               final selected = await Navigator.pushNamed(
@@ -62,22 +68,22 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
             child: AbsorbPointer(
               child: TextFieldWidget(
                 controller: usersCubit.recieverController,
-                hintText: 'Select Receiver',
-                labelText: 'Receiver',
+                hintText: context.tr('select_receiver'),
+                labelText: context.tr('receiver'),
                 obscureText: false,
               ),
             ),
           ),
           verticalSpace(24),
 
-          // المحافظة الأصل
+          /// المحافظة الأصل
           GestureDetector(
             onTap: () async {
               final selected = await Navigator.pushNamed(
                 context,
                 Routes.governorateSelectionScreen,
-                arguments: true, // إذا بتستخدم isOrigin كـ arg
-              ) as GovernorateDatum?; // نوع صريح
+                arguments: true,
+              ) as GovernorateDatum?;
 
               if (selected != null) {
                 governoratesCubit.selectedOriginGovernorateId = selected.id;
@@ -89,15 +95,15 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
             child: AbsorbPointer(
               child: TextFieldWidget(
                 controller: governoratesCubit.originGovernorateController,
-                hintText: 'Select Origin Governorate',
-                labelText: 'Origin Governorate',
+                hintText: context.tr('select_origin_governorate'),
+                labelText: context.tr('origin_governorate'),
                 obscureText: false,
               ),
             ),
           ),
           verticalSpace(24),
 
-          // المحافظة الوجهة
+          /// المحافظة الوجهة
           GestureDetector(
             onTap: () async {
               final selected = await Navigator.pushNamed(
@@ -117,21 +123,34 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
             child: AbsorbPointer(
               child: TextFieldWidget(
                 controller: governoratesCubit.destinationGovernorateController,
-                hintText: 'Select Destination Governorate',
-                labelText: 'Destination Governorate',
+                hintText: context.tr('select_destination_governorate'),
+                labelText: context.tr('destination_governorate'),
                 obscureText: false,
               ),
             ),
           ),
           verticalSpace(24),
 
+// مركز الانطلاق
           // مركز الانطلاق
           GestureDetector(
             onTap: () async {
+              if (shipmentCubit.selectedOriginGovernorateId == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Please select origin governorate first"),
+                  ),
+                );
+                return;
+              }
+
               final selected = await Navigator.pushNamed(
                 context,
                 Routes.centerSelectionScreen,
-                arguments: true,
+                arguments: {
+                  'isOrigin': true,
+                  'governorateId': shipmentCubit.selectedOriginGovernorateId,
+                },
               ) as CenterDatum?;
 
               if (selected != null) {
@@ -149,66 +168,82 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
               ),
             ),
           ),
+
           verticalSpace(24),
 
-          // مركز الوجهة
+// مركز الوجهة
           GestureDetector(
             onTap: () async {
+              if (shipmentCubit.selectedDestinationGovernorateId == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text("Please select destination governorate first"),
+                  ),
+                );
+                return;
+              }
+
               final selected = await Navigator.pushNamed(
                 context,
                 Routes.centerSelectionScreen,
-                arguments: false,
+                arguments: {
+                  'isOrigin': false,
+                  'governorateId':
+                      shipmentCubit.selectedDestinationGovernorateId,
+                },
               ) as CenterDatum?;
 
               if (selected != null) {
                 centersCubit.selectedDestinationCenterId = selected.id;
                 centersCubit.destinationCenterController.text = selected.name;
-
                 shipmentCubit.selectedDestinationCenterId = selected.id;
               }
             },
             child: AbsorbPointer(
               child: TextFieldWidget(
                 controller: centersCubit.destinationCenterController,
-                hintText: 'Select Destination Center',
-                labelText: 'Destination Center',
+                hintText: context.tr('select_destination_center'),
+                labelText: context.tr('destination_center'),
                 obscureText: false,
               ),
             ),
           ),
 
-          // باقي الحقول العادية
           verticalSpace(24),
+
+          /// باقي الحقول
           TextFieldWidget(
             controller: shipmentCubit.originAddressController,
-            hintText: 'Origin Address',
-            labelText: 'Origin Address',
+            hintText: context.tr('origin_address'),
+            labelText: context.tr('origin_address'),
             obscureText: false,
           ),
           verticalSpace(24),
           TextFieldWidget(
             controller: shipmentCubit.destinationAddressController,
-            hintText: 'Destination Address',
-            labelText: 'Destination Address',
+            hintText: context.tr('destination_address'),
+            labelText: context.tr('destination_address'),
             obscureText: false,
           ),
           verticalSpace(24),
           TextFieldWidget(
             controller: shipmentCubit.specialInstructionsController,
-            hintText: 'Special Handling Instructions',
-            labelText: 'Special Handling Instructions',
+            hintText: context.tr('special_instructions'),
+            labelText: context.tr('special_instructions'),
             obscureText: false,
           ),
           verticalSpace(40),
 
+          /// زر التأكيد
           ButtonWidget(
-            title: "Confirm",
+            title: context.tr("confirm"),
             onTap: () {
               if (shipmentCubit.formKey.currentState!.validate()) {
                 shipmentCubit.shipmentrequest();
               }
             },
-            textStyle: AppTextStyles.font24WhiteBold,
+            textStyle: AppTextStyles.font24Bold(context),
           )
         ],
       ),

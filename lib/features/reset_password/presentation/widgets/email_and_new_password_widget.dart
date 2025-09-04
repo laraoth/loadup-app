@@ -81,7 +81,7 @@ class _EmailAndNewPasswordWidgetState extends State<EmailAndNewPasswordWidget> {
                           context.read<ResetPasswordCubit>().reset();
                         }
                       },
-                      textStyle: AppTextStyles.font24WhiteBold);
+                      textStyle: AppTextStyles.font24Bold(context));
                 }
               },
             )

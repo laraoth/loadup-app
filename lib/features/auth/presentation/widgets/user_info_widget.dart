@@ -10,6 +10,7 @@ import 'package:loadup/core/public_widgets/text_field_widget.dart';
 import 'package:loadup/core/routing/routes.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_state.dart';
+import 'package:loadup/core/helpers/translation_extension.dart'; // لازم يكون موجود
 
 class UserInfoWidget extends StatelessWidget {
   const UserInfoWidget({super.key});
@@ -28,8 +29,8 @@ class UserInfoWidget extends StatelessWidget {
         children: [
           TextFieldWidget(
             controller: signupCubit.nameController,
-            hintText: 'Full Name',
-            labelText: 'Full Name',
+            hintText: context.tr("full_name"),
+            labelText: context.tr("full_name"),
             obscureText: false,
             prefixIcon: Icons.person,
             prefixIconColor: AppColors.primaryOrange,
@@ -37,15 +38,15 @@ class UserInfoWidget extends StatelessWidget {
           verticalSpace(24),
           TextFieldWidget(
             controller: signupCubit.phoneController,
-            hintText: 'Phone Number',
-            labelText: 'Phone Number',
+            hintText: context.tr("phone_number"),
+            labelText: context.tr("phone_number"),
             obscureText: false,
           ),
           verticalSpace(24),
           TextFieldWidget(
             controller: signupCubit.addressController,
-            hintText: 'Address',
-            labelText: 'Address',
+            hintText: context.tr("address"),
+            labelText: context.tr("address"),
             obscureText: false,
             prefixIcon: Icons.location_pin,
             prefixIconColor: AppColors.primaryOrange,
@@ -59,7 +60,7 @@ class UserInfoWidget extends StatelessWidget {
                 onTap: () => _selectBirthDate(context),
                 child: InputDecorator(
                   decoration: InputDecoration(
-                    labelText: 'Birth Date',
+                    labelText: context.tr("birth_date"),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -68,7 +69,7 @@ class UserInfoWidget extends StatelessWidget {
                   ),
                   child: Text(
                     selectedBirthDate == null
-                        ? 'Select your birth date'
+                        ? context.tr("select_birth_date")
                         : '${selectedBirthDate.toLocal()}'.split(' ')[0] +
                             ' - Age: ${calculatedAge ?? ''}',
                     style: TextStyle(
@@ -85,8 +86,8 @@ class UserInfoWidget extends StatelessWidget {
           verticalSpace(24),
           TextFieldWidget(
             controller: signupCubit.emailController,
-            hintText: 'Email',
-            labelText: 'Email',
+            hintText: context.tr("email"),
+            labelText: context.tr("email"),
             obscureText: false,
             prefixIcon: Icons.email,
             prefixIconColor: AppColors.primaryOrange,
@@ -99,8 +100,8 @@ class UserInfoWidget extends StatelessWidget {
                 children: [
                   TextFieldWidget(
                     controller: signupCubit.passwordController,
-                    hintText: 'Password',
-                    labelText: 'Password',
+                    hintText: context.tr("password"),
+                    labelText: context.tr("password"),
                     prefixIcon: Icons.lock,
                     prefixIconColor: AppColors.primaryOrange,
                     obscureText: !isVisible,
@@ -117,8 +118,8 @@ class UserInfoWidget extends StatelessWidget {
                   verticalSpace(24),
                   TextFieldWidget(
                     controller: signupCubit.passwordConfirmationController,
-                    hintText: 'Confirm Password',
-                    labelText: 'Confirm Password',
+                    hintText: context.tr("confirm_password"),
+                    labelText: context.tr("confirm_password"),
                     prefixIcon: Icons.lock,
                     prefixIconColor: AppColors.primaryOrange,
                     obscureText: !isVisible,
@@ -155,18 +156,19 @@ class UserInfoWidget extends StatelessWidget {
                 return LoadingWidget();
               } else {
                 return ButtonWidget(
-                  title: "Sign up",
+                  title: context.tr("sign_up"),
                   onTap: () {
                     if (signupCubit.selectedBirthDate != null) {
                       signupCubit.signUp();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Please select your birth date")),
+                        SnackBar(
+                            content:
+                                Text(context.tr("please_select_birth_date"))),
                       );
                     }
                   },
-                  textStyle: AppTextStyles.font24WhiteBold,
+                  textStyle: AppTextStyles.font24Bold(context),
                 );
               }
             },

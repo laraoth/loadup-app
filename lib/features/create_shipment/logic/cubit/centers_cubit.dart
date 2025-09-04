@@ -17,13 +17,10 @@ class CentersCubit extends Cubit<CentersState> {
   int? selectedOriginCenterId;
   int? selectedDestinationCenterId;
 
-  int _currentPage = 1;
-  int get currentPage => _currentPage;
-
-  void getcenters({int page = 1}) async {
+  void getcenters() async {
     emit(CentersLoading());
 
-    final response = await _centersRepo.getcenters(page: page);
+    final response = await _centersRepo.getcenters();
 
     response.fold(
       (fail) {
@@ -31,7 +28,6 @@ class CentersCubit extends Cubit<CentersState> {
       },
       (centersResponse) {
         if (!isClosed) {
-          _currentPage = page;
           emit(CentersSuccess(
             centersResponse.message,
             centersResponse,
@@ -39,16 +35,6 @@ class CentersCubit extends Cubit<CentersState> {
         }
       },
     );
-  }
-
-  void nextPage() {
-    getcenters(page: _currentPage + 1);
-  }
-
-  void previousPage() {
-    if (_currentPage > 1) {
-      getcenters(page: _currentPage - 1);
-    }
   }
 
   void setSelectedOriginCenter(CenterDatum center) {

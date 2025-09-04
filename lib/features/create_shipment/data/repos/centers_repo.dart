@@ -16,13 +16,10 @@ class CentersRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, CentersModel>> getcenters(
-      {int page = 1}) async {
+  Future<Either<Failure, CentersModel>> getcenters() async {
     if (await networkInfo.isConnected) {
       try {
-        final centersResponse =
-            await centersRemoteDataSource.getcenters(page: page);
-
+        final centersResponse = await centersRemoteDataSource.getcenters();
         return Right(centersResponse);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));

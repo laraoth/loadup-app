@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:loadup/features/my_shipping/data/model/shipment_model.dart';
 import 'package:loadup/features/my_shipping/data/repo/received_shipments_repo.dart';
 
@@ -10,9 +9,10 @@ class ReceivedShipmentsCubit extends Cubit<ReceivedShipmentsState> {
   ReceivedShipmentsCubit(this._receivedShipmentsRepo)
       : super(ReceivedShipmentsInitial());
 
-  void getreceivedshipments() async {
+  void getreceivedshipments({String? status}) async {
     emit(ReceivedShipmentsLoading());
-    final response = await _receivedShipmentsRepo.getreceivedshipments();
+    final response =
+        await _receivedShipmentsRepo.getreceivedshipments(status: status);
 
     response.fold(
       (fail) {

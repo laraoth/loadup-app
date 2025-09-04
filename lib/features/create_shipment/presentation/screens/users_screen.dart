@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/features/create_shipment/data/models/users_model.dart';
 import 'package:loadup/features/create_shipment/logic/cubit/users_cubit.dart';
@@ -21,7 +22,7 @@ class _UsersSelectionScreenState extends State<UsersSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Choose the receiver')),
+        appBar: AppBar(title: Text(context.tr('Choose the receiver'))),
         body: BlocBuilder<UsersCubit, UsersState>(
           builder: (context, state) {
             if (state is UsersLoading) {
@@ -54,12 +55,12 @@ class _UsersSelectionScreenState extends State<UsersSelectionScreen> {
                         onPressed: usersCubit.currentPage > 1
                             ? () => usersCubit.previousPage()
                             : null,
-                        child: const Text("pre"),
+                        child: Text(context.tr("Previous")),
                       ),
-                      Text("page ${usersCubit.currentPage}"),
+                      Text(context.tr("page ${usersCubit.currentPage}")),
                       TextButton(
                         onPressed: () => usersCubit.nextPage(),
-                        child: const Text("next"),
+                        child: Text(context.tr("next")),
                       ),
                     ],
                   ),

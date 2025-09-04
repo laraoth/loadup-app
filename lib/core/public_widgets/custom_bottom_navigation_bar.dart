@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/di/dependency_injection.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/features/auth/logic/cubit/logout_cubit.dart';
 import 'package:loadup/features/home/presentation/screens/home_screen.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
@@ -22,7 +23,6 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   late int _selectedIndex;
-
   late final List<Widget> _screens;
 
   @override
@@ -55,38 +55,73 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = AppColors.surface(context);
+    final selectedColor = AppColors.primary(context);
+    final unselectedColor = AppColors.text(context);
+
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primaryOrange,
-        unselectedItemColor: AppColors.grey,
-        showUnselectedLabels: true,
-        elevation: 8,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: "Home",
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: cardColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: const Offset(0, -3),
+            ),
+          ],
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping_outlined),
-            activeIcon: Icon(Icons.local_shipping),
-            label: "My Shipping",
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            activeIcon: Icon(Icons.account_balance_wallet),
-            label: "Wallet",
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: selectedColor,
+            unselectedItemColor: unselectedColor,
+            backgroundColor: cardColor,
+            selectedFontSize: 14,
+            unselectedFontSize: 12,
+            showUnselectedLabels: true,
+            elevation: 0,
+            items: [
+              BottomNavigationBarItem(
+                icon:
+                    Icon(Icons.home_outlined, size: 28, color: unselectedColor),
+                activeIcon: Icon(Icons.home, size: 30, color: selectedColor),
+                label: context.tr('home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.local_shipping_outlined,
+                    size: 28, color: unselectedColor),
+                activeIcon:
+                    Icon(Icons.local_shipping, size: 30, color: selectedColor),
+                label: context.tr('my_shipping'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_balance_wallet_outlined,
+                    size: 28, color: unselectedColor),
+                activeIcon: Icon(Icons.account_balance_wallet,
+                    size: 30, color: selectedColor),
+                label: context.tr('payments'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline,
+                    size: 28, color: unselectedColor),
+                activeIcon: Icon(Icons.person, size: 30, color: selectedColor),
+                label: context.tr('profile'),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
+        ),
       ),
     );
   }

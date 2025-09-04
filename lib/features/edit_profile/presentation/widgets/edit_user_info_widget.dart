@@ -4,6 +4,7 @@ import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/extentions.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/core/public_widgets/button_widget.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/core/public_widgets/text_field_widget.dart';
@@ -33,22 +34,26 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
           children: [
             TextFieldWidget(
               controller: editprofilecubit.nameController,
-              hintText: 'Name',
-              labelText: 'Name',
+              hintText: context.tr('name'),
+              labelText: context.tr('name'),
+              prefixIcon: Icons.person,
+              prefixIconColor: AppColors.primaryOrange,
               obscureText: false,
             ),
             verticalSpace(24),
             TextFieldWidget(
               controller: editprofilecubit.emailController,
-              hintText: 'Email',
-              labelText: 'Email',
+              hintText: context.tr('email'),
+              labelText: context.tr('email'),
+              prefixIcon: Icons.email,
+              prefixIconColor: AppColors.primaryOrange,
               obscureText: false,
             ),
             verticalSpace(24),
             TextFieldWidget(
               controller: editprofilecubit.phoneController,
-              hintText: 'Phone Number',
-              labelText: 'Phone Number',
+              hintText: context.tr('phone_number'),
+              labelText: context.tr('phone_number'),
               prefixIcon: Icons.phone,
               prefixIconColor: AppColors.primaryOrange,
               obscureText: false,
@@ -56,8 +61,8 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
             verticalSpace(40),
             TextFieldWidget(
               controller: editprofilecubit.addressController,
-              hintText: 'Address',
-              labelText: 'Address',
+              hintText: context.tr('address'),
+              labelText: context.tr('address'),
               prefixIcon: Icons.location_city,
               prefixIconColor: AppColors.primaryOrange,
               obscureText: false,
@@ -71,7 +76,7 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
                   onTap: () => _selectBirthDate(context),
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Birth Date',
+                      labelText: context.tr('birth_date'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -80,9 +85,8 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
                     ),
                     child: Text(
                       selectedBirthDate == null
-                          ? 'Select your birth date'
-                          : '${selectedBirthDate.toLocal()}'.split(' ')[0] +
-                              ' - Age: ${calculatedAge ?? ''}',
+                          ? context.tr('select_your_birth_date')
+                          : '${'${selectedBirthDate.toLocal()}'.split(' ')[0]} - ${context.tr('age')}: ${calculatedAge ?? ''}',
                       style: TextStyle(
                         color: selectedBirthDate == null
                             ? Colors.grey
@@ -112,7 +116,7 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
                   return LoadingWidget();
                 } else {
                   return ButtonWidget(
-                      title: "Save",
+                      title: context.tr("save"),
                       onTap: () {
                         if (context
                             .read<EditProfileCubit>()
@@ -122,7 +126,7 @@ class _EditUserInfoWidgetState extends State<EditUserInfoWidget> {
                           context.read<EditProfileCubit>().updateprofile();
                         }
                       },
-                      textStyle: AppTextStyles.font24WhiteBold);
+                      textStyle: AppTextStyles.font24Bold(context));
                 }
               },
             )

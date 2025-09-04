@@ -13,7 +13,7 @@ String sentShipmentsModelToJson(ShipmentsModel data) =>
 class ShipmentsModel {
   bool success;
   String message;
-  List<Datum> data;
+  List<ShipmentDatum> data;
 
   ShipmentsModel({
     required this.success,
@@ -24,7 +24,8 @@ class ShipmentsModel {
   factory ShipmentsModel.fromJson(Map<String, dynamic> json) => ShipmentsModel(
         success: json["success"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<ShipmentDatum>.from(
+            json["data"].map((x) => ShipmentDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,7 +35,7 @@ class ShipmentsModel {
       };
 }
 
-class Datum {
+class ShipmentDatum {
   int? id;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -66,7 +67,7 @@ class Datum {
   dynamic? assignedDeliveryPerson;
   String? shipmentCode;
 
-  Datum({
+  ShipmentDatum({
     this.id,
     this.createdAt,
     this.updatedAt,
@@ -98,7 +99,7 @@ class Datum {
     this.assignedDeliveryPerson,
     this.shipmentCode,
   });
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory ShipmentDatum.fromJson(Map<String, dynamic> json) => ShipmentDatum(
         id: json["id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),

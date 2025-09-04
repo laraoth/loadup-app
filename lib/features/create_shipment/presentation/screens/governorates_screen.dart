@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/features/create_shipment/data/models/governorates_model.dart';
 import 'package:loadup/features/create_shipment/logic/cubit/governorates_cubit.dart';
@@ -28,7 +29,7 @@ class _GovernorateSelectionScreenState
     final cubit = context.read<GovernoratesCubit>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Choose the Governorate')),
+      appBar: AppBar(title: Text(context.tr('Choose the Governorate'))),
       body: Column(
         children: [
           // 🔍 مربع البحث
@@ -37,7 +38,7 @@ class _GovernorateSelectionScreenState
             child: TextField(
               controller: cubit.searchController,
               decoration: InputDecoration(
-                hintText: "Search governorates...",
+                hintText: context.tr("Search governorates..."),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
@@ -81,12 +82,12 @@ class _GovernorateSelectionScreenState
                             onPressed: cubit.currentPage > 1
                                 ? cubit.previousPage
                                 : null,
-                            child: const Text("Previous"),
+                            child: Text(context.tr("Previous")),
                           ),
-                          Text("Page ${cubit.currentPage}"),
+                          Text(context.tr("Page ${cubit.currentPage}")),
                           TextButton(
                             onPressed: cubit.nextPage,
-                            child: const Text("Next"),
+                            child: Text(context.tr("Next")),
                           ),
                         ],
                       ),

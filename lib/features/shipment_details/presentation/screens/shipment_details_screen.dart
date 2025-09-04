@@ -1,141 +1,161 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/spacing.dart';
-import 'package:loadup/core/public_widgets/loading_widget.dart';
-import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
+import 'package:loadup/features/my_shipping/data/model/shipment_model.dart';
+import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
+import 'package:loadup/features/payment/logic/cubit/create_payment_state.dart';
 import 'package:loadup/features/shipment_details/presentation/widgets/detail_Item_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class ShipmentDetailsScreen extends StatefulWidget {
-  const ShipmentDetailsScreen({Key? key}) : super(key: key);
+class SentShipmentDetailsScreen extends StatelessWidget {
+  final ShipmentDatum shipment;
 
-  @override
-  State<ShipmentDetailsScreen> createState() => _ShipmentDetailsScreenState();
-}
-
-class _ShipmentDetailsScreenState extends State<ShipmentDetailsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<SentShipmentsCubit>().getshipments();
-  }
+  const SentShipmentDetailsScreen({super.key, required this.shipment});
 
   @override
   Widget build(BuildContext context) {
+    final qrRawString = shipment.qrCode ?? '{}';
+    final shipmentStatusNormalized =
+        shipment.status?.trim().toLowerCase() ?? '';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shipment Details', style: AppTextStyles.font18BlackBold),
+        title: Text(
+          context.tr("shipment_details"),
+          style: AppTextStyles.font18Bold(context),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface(context),
         elevation: 1,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0.w),
-        child: BlocBuilder<SentShipmentsCubit, SentShipmentsState>(
-          builder: (context, state) {
-            if (state is SentShipmentsLoading) {
-              return LoadingWidget();
-            } else if (state is SentShipmentsError) {
-              return Center(
-                  child: Text(state.error,
-                      style: AppTextStyles.font14GreyRegular));
-            } else if (state is SentShipmentsSuccess) {
-              final shipment = state.shipmentsModel.data.first;
+      body: BlocConsumer<ApprovePriceCubit, ApprovePriceState>(
+        listener: (context, state) {
+          if (state is ApprovePriceSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.approvePriceModel.message)),
+            );
+          } else if (state is ApprovePriceError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16.0.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// --- معلومات أساسية ---
+                DetailItemWidget(
+                    title: context.tr("shipment_id"),
+                    value: shipment.id.toString()),
+                DetailItemWidget(
+                    title: context.tr("shipment_code"),
+                    value: shipment.shipmentCode ?? ''),
+                DetailItemWidget(
+                    title: context.tr("status"), value: shipment.status ?? ''),
+                DetailItemWidget(
+                    title: context.tr("cargo_type"),
+                    value: shipment.typeOfCargo ?? ''),
+                DetailItemWidget(
+                    title: context.tr("weight"),
+                    value: shipment.weight?.toString() ?? ''),
+                DetailItemWidget(
+                    title: context.tr("special_instructions"),
+                    value: shipment.specialHandlingInstructions ??
+                        context.tr("none")),
+                DetailItemWidget(
+                    title: context.tr("created_at"),
+                    value: shipment.createdAt.toString()),
 
-              // النص كامل مثل ما رجع من API
-              final qrRawString = shipment.qrCode ?? '{}';
+                verticalSpace(16),
 
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DetailItemWidget(
-                        title: 'Shipment id',
-                        value: shipment.id.toString() ?? ''),
-                    DetailItemWidget(
-                        title: 'Shipment Code',
-                        value: jsonDecode(qrRawString)['shipment_code'] ?? ''),
-                    DetailItemWidget(
-                        title: 'Status', value: shipment.status ?? ''),
-                    DetailItemWidget(
-                        title: 'Cargo Type', value: shipment.typeOfCargo ?? ''),
-                    DetailItemWidget(
-                        title: 'Origin Address',
-                        value: shipment.originAddress ?? ''),
-                    DetailItemWidget(
-                        title: 'Destination Address',
-                        value: shipment.destinationAddress ?? ''),
-                    DetailItemWidget(
-                        title: 'Origin Center',
-                        value: shipment.originCenter?.name ?? ''),
-                    DetailItemWidget(
-                        title: 'Destination Center',
-                        value: shipment.destinationCenter?.name ?? ''),
-                    DetailItemWidget(
-                        title: 'Receiver Name',
-                        value: shipment.receiver?.name ?? ''),
-                    DetailItemWidget(
-                        title: 'Receiver Phone',
-                        value: shipment.receiver?.phone ?? ''),
-                    DetailItemWidget(
-                      title: 'Special Instructions',
-                      value: shipment.specialHandlingInstructions ?? 'None',
-                    ),
-                    DetailItemWidget(
-                      title: 'Created At',
-                      value: shipment.createdAt.toString(),
-                    ),
-                    verticalSpace(20),
-                    Center(
-                      child: QrImageView(
-                        data: qrRawString,
-                        version: QrVersions.auto,
-                        size: 250.0,
-                        backgroundColor: Colors.white,
-                      ),
-                    ),
-                    verticalSpace(20),
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            // هون ممكن تحط أي أكشن لفتح الخريطة مثلاً
-                          },
-                          icon: Icon(
-                            Icons.location_pin,
-                            size: 40,
-                            color: AppColors.primaryOrange,
+                /// --- السعر + زر قبول ---
+                DetailItemWidget(
+                  title: context.tr("price"),
+                  value: shipment.price != null
+                      ? shipment.price.toString()
+                      : context.tr("not_set"),
+                ),
+
+                verticalSpace(16),
+
+                if (shipmentStatusNormalized == "pending customer approval")
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          final pageContext = context; // خزن context تبع الشاشة
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: Text(context.tr("confirm_payment")),
+                                content: Text(context.tr(
+                                    "you_will_pay_the_amount_for_this_shipment")),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext), // غلق
+                                    child: Text(context.tr("cancel")),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(dialogContext);
+                                      pageContext
+                                          .read<ApprovePriceCubit>()
+                                          .approvePrice(shipment.id!);
+                                    },
+                                    child: Text(context.tr("confirm")),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.w, vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
+                        child: state is ApprovePriceLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2)
+                            : Text(
+                                context.tr("accept price"),
+                                style: AppTextStyles.font16Bold(context),
+                              ),
                       ),
-                    ),
-                    verticalSpace(20),
-                  ],
+                    ],
+                  ),
+
+                verticalSpace(20),
+
+                /// --- QR Code ---
+                Center(
+                  child: QrImageView(
+                    data: qrRawString,
+                    version: QrVersions.auto,
+                    size: 250.0,
+                    backgroundColor: Colors.white,
+                  ),
                 ),
-              );
-            }
-            return Container();
-          },
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

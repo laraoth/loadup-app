@@ -6,7 +6,7 @@ import 'package:loadup/features/create_shipment/data/models/centers_model.dart';
 import 'package:loadup/main.dart';
 
 abstract class CentersRemoteDataSource {
-  Future<CentersModel> getcenters({int page = 1});
+  Future<CentersModel> getcenters();
 }
 
 class CentersRemoteDataSourceImp implements CentersRemoteDataSource {
@@ -15,23 +15,17 @@ class CentersRemoteDataSourceImp implements CentersRemoteDataSource {
   CentersRemoteDataSourceImp({required this.dio});
 
   @override
-  Future<CentersModel> getcenters({int page = 1}) async {
+  Future<CentersModel> getcenters() async {
     final result = await dio.dioGetMethod(
       endPoint: AppLinkUrl.getcenters,
       token: storage.getString('token'),
-      queryParameters: {
-        "page": 1,
-        "per_page": 10,
-        "search": "",
-        "sort_by": "name",
-        "sort_order": "asc",
-      },
+      queryParameters: {},
     );
+    print("🔍 Response: $result");
 
     return result.fold(
       (fail) => throw ServerException(fail.message),
-      (centersResponse) =>
-          CentersModel.fromJson(centersResponse),
+      (centersResponse) => CentersModel.fromJson(centersResponse),
     );
   }
 }

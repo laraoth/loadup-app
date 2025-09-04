@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 
 import 'app_link_url.dart';
 import 'error/failure.dart';
+import 'dart:io';
 
 class CrudDio {
   late Dio dio;
@@ -14,10 +16,17 @@ class CrudDio {
     BaseOptions options = BaseOptions(
       baseUrl: AppLinkUrl.baseUrl,
       receiveDataWhenStatusError: true,
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     );
     dio = Dio(options);
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
   }
 
   Future<Either<Failure, Map<String, dynamic>>> dioGetMethod({

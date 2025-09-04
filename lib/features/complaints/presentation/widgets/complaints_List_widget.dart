@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loadup/core/public_widgets/loading_widget.dart';
 import 'package:loadup/core/constant/text_styles.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/features/complaints/logic/cubit/complaints_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/delete_complaint_cubit.dart';
 import 'package:loadup/features/complaints/logic/cubit/update_complaint_cubit.dart';
@@ -43,13 +44,12 @@ class ComplaintsListWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// العنوان + زر التعديل + زر الحذف
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Shipment ID: ${complaint.shipmentId}",
-                              style: AppTextStyles.font16BlackRegular,
+                              "${context.tr("shipment_id")}: ${complaint.shipmentId}",
+                              style: AppTextStyles.font16Bold(context),
                             ),
                             Row(
                               children: [
@@ -64,7 +64,8 @@ class ComplaintsListWidget extends StatelessWidget {
                                       context: context,
                                       builder: (dialogContext) {
                                         return AlertDialog(
-                                          title: const Text('Edit Complaint'),
+                                          title: Text(
+                                              context.tr("edit_complaint")),
                                           content: Form(
                                             key: updateCubit.formKey,
                                             child: TextFormField(
@@ -74,13 +75,16 @@ class ComplaintsListWidget extends StatelessWidget {
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.trim().isEmpty) {
-                                                  return 'Description can\'t be empty';
+                                                  return context
+                                                      .tr("description_empty");
                                                 }
                                                 return null;
                                               },
-                                              decoration: const InputDecoration(
-                                                labelText: 'Description',
-                                                border: OutlineInputBorder(),
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    context.tr("description"),
+                                                border:
+                                                    const OutlineInputBorder(),
                                               ),
                                             ),
                                           ),
@@ -89,7 +93,7 @@ class ComplaintsListWidget extends StatelessWidget {
                                               onPressed: () =>
                                                   Navigator.of(dialogContext)
                                                       .pop(),
-                                              child: const Text('Cancel'),
+                                              child: Text(context.tr("cancel")),
                                             ),
                                             ElevatedButton(
                                               onPressed: () async {
@@ -108,13 +112,13 @@ class ComplaintsListWidget extends StatelessWidget {
                                                   ScaffoldMessenger.of(
                                                           dialogContext)
                                                       .showSnackBar(
-                                                    const SnackBar(
-                                                        content: Text(
-                                                            'Failed to update complaint')),
+                                                    SnackBar(
+                                                        content: Text(context.tr(
+                                                            "update_complaint_failed"))),
                                                   );
                                                 }
                                               },
-                                              child: const Text('Update'),
+                                              child: Text(context.tr("update")),
                                             ),
                                           ],
                                         );
@@ -134,9 +138,9 @@ class ComplaintsListWidget extends StatelessWidget {
                                     if (success) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Complaint deleted successfully')),
+                                        SnackBar(
+                                            content: Text(context
+                                                .tr("complaint_deleted"))),
                                       );
                                       context
                                           .read<ComplaintsCubit>()
@@ -144,9 +148,9 @@ class ComplaintsListWidget extends StatelessWidget {
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Failed to delete complaint')),
+                                        SnackBar(
+                                            content: Text(context.tr(
+                                                "delete_complaint_failed"))),
                                       );
                                     }
                                   },
@@ -156,11 +160,13 @@ class ComplaintsListWidget extends StatelessWidget {
                           ],
                         ),
                         verticalSpace(6),
-                        Text("Description: ${complaint.description}",
-                            style: AppTextStyles.font14GreyRegular),
+                        Text(
+                            "${context.tr("description")}: ${complaint.description}",
+                            style: AppTextStyles.font14Grey(context)),
                         verticalSpace(6),
-                        Text("Date: ${complaint.createdAt}",
-                            style: AppTextStyles.font16BlackRegular),
+                        Text(
+                            "${context.tr("created_at")}: ${complaint.createdAt}",
+                            style: AppTextStyles.font16Bold(context)),
                       ],
                     ),
                   );
@@ -174,12 +180,12 @@ class ComplaintsListWidget extends StatelessWidget {
                     onPressed: complaintsCubit.currentPage > 1
                         ? () => complaintsCubit.previousPage()
                         : null,
-                    child: const Text("Previous"),
+                    child: Text(context.tr("previous")),
                   ),
-                  Text("Page ${complaintsCubit.currentPage}"),
+                  Text("${context.tr("page")} ${complaintsCubit.currentPage}"),
                   TextButton(
                     onPressed: () => complaintsCubit.nextPage(),
-                    child: const Text("Next"),
+                    child: Text(context.tr("next")),
                   ),
                 ],
               ),

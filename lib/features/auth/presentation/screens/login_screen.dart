@@ -6,6 +6,7 @@ import 'package:loadup/core/helpers/spacing.dart';
 import 'package:loadup/core/routing/routes.dart';
 import 'package:loadup/features/auth/presentation/widgets/linktext_widget.dart';
 import 'package:loadup/features/auth/presentation/widgets/email_and_password_widget.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -24,15 +25,15 @@ class LoginScreen extends StatelessWidget {
               children: [
                 verticalSpace(30),
                 Text(
-                  "Welcome Back",
-                  style: AppTextStyles.font32BlackBold,
+                  context.tr("welcome_back"),
+                  style: AppTextStyles.font32Bold(context),
                 ),
                 verticalSpace(55),
                 EmailAndPasswordWidget(),
                 verticalSpace(55),
                 LinkTextWidget(
-                  normalText: "Don't have an account? ",
-                  linkText: "Sign Up",
+                  normalText: context.tr("dont_have_account"),
+                  linkText: context.tr("sign_up"),
                   onTap: () {
                     context.pushNamed(Routes.signUpScreen);
                   },

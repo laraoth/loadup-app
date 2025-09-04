@@ -3,13 +3,13 @@ import 'package:loadup/core/constant/text_styles.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
-  final String email;
-  final String? profilePhotoUrl; // ✅ أضفنا
+  final String? email;
+  final String? profilePhotoUrl;
 
   const ProfileHeaderWidget({
     super.key,
     required this.name,
-    required this.email,
+    this.email,
     this.profilePhotoUrl,
   });
 
@@ -27,9 +27,9 @@ class ProfileHeaderWidget extends StatelessWidget {
               : null,
         ),
         const SizedBox(height: 12),
-        Text(name, style: AppTextStyles.font18BlackBold),
+        Text(name, style: AppTextStyles.font18Bold(context)),
         const SizedBox(height: 4),
-        Text(email, style: AppTextStyles.font14GreyRegular),
+        Text(email ?? '', style: AppTextStyles.font14Grey(context)),
       ],
     );
   }

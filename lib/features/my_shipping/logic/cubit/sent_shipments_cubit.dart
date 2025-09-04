@@ -8,9 +8,9 @@ class SentShipmentsCubit extends Cubit<SentShipmentsState> {
   final SentShipmentsRepo _sentshipmentsRepo;
   SentShipmentsCubit(this._sentshipmentsRepo) : super(SentShipmentsInitial());
 
-  void getshipments() async {
+  void getshipments({String? status}) async {
     emit(SentShipmentsLoading());
-    final response = await _sentshipmentsRepo.getsentshipments();
+    final response = await _sentshipmentsRepo.getsentshipments(status: status);
 
     response.fold(
       (fail) {

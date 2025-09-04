@@ -11,7 +11,7 @@ class Routes {
   static const String customBottomNavigationBar = '/customBottomNavigationBar';
   static const String complaintsScreen = '/complaintsScreen';
   static const String settingsScreen = '/settingsScreen';
-  static const String shipmentDetailsScreen = '/shipmentDetailsScreen';
+  static const String sentShipmentDetailsScreen = '/sentShipmentDetailsScreen';
   static const String shipmentRequestScreen = '/shipmentRequestScreen';
   static const String governorateSelectionScreen =
       '/governorateSelectionScreen';
@@ -22,4 +22,8 @@ class Routes {
   static const String complaintsViewScreen = '/complaintsViewScreen';
   static const String complaintsScreenSelector = '/complaintsScreenSelector';
   static const String mapScreen = '/mapScreen';
+  static const String createPaymentScreen = '/createPaymentScreen';
+  static const String receivedShipmentDetailsScreen =
+      '/receivedShipmentDetailsScreen';
+  static const String pendingShipmentsScreen = '/pendingShipmentsScreen';
 }

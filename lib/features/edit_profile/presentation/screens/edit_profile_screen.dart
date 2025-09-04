@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loadup/core/constant/colors.dart';
+import 'package:loadup/core/constant/text_styles.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 import 'package:loadup/features/edit_profile/presentation/widgets/edit_user_info_widget.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -9,19 +11,19 @@ class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface(context),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: const Text(
-          'Edit Profile',
+        title: Text(
+          context.tr('edit_profile'),
           style: TextStyle(
-            color: Colors.black,
+            color: AppTextStyles.font14Regular(context).color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -32,7 +34,7 @@ class EditProfileScreen extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(16),
           ),
           child: const EditUserInfoWidget(),

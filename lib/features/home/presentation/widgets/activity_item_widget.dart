@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loadup/core/constant/colors.dart';
 
 class ActivityItemWidget extends StatelessWidget {
   final String code;
@@ -18,15 +19,20 @@ class ActivityItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground(context),
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          const Icon(Icons.local_shipping, color: Colors.grey),
+          Icon(Icons.local_shipping, color: AppColors.icon(context)),
           const SizedBox(width: 12),
-          Expanded(child: Text(code)),
+          Expanded(
+            child: Text(
+              code,
+              style: TextStyle(color: AppColors.text(context)),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(

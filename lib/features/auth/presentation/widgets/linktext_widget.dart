@@ -21,11 +21,11 @@ class LinkTextWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: normalText,
-            style: AppTextStyles.font14GreyRegular,
+            style: AppTextStyles.font14Grey(context),
           ),
           TextSpan(
             text: linkText,
-            style: AppTextStyles.font14BlackRegular.copyWith(
+            style: AppTextStyles.font14Regular(context).copyWith(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),

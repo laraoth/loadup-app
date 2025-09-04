@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loadup/core/helpers/spacing.dart';
+import 'package:loadup/core/helpers/translation_extension.dart';
 
 class ShippingFilterTabsWidget extends StatefulWidget {
   final int selectedIndex;
@@ -18,12 +19,26 @@ class ShippingFilterTabsWidget extends StatefulWidget {
 }
 
 class _ShippingFilterTabsWidgetState extends State<ShippingFilterTabsWidget> {
-  final List<String> filterTabs = [
-    'All Packages',
-    'in transit',
-    'Delivered',
-    'Cancelled',
-  ];
+  late final List<String> filterTabs;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    filterTabs = [
+      context.tr("all"),
+      context.tr("draft"),
+      context.tr("pending admin approval"),
+      context.tr("rejected by admin"),
+      context.tr("priced by admin"),
+      context.tr("pending customer approval"),
+      context.tr("rejected by customer"),
+      context.tr("pending payment"),
+      context.tr("paid"),
+      context.tr("in_transit"),
+      context.tr("delivered"),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

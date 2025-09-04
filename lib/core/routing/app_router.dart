@@ -22,9 +22,14 @@ import 'package:loadup/features/create_shipment/presentation/screens/governorate
 import 'package:loadup/features/create_shipment/presentation/screens/users_screen.dart';
 import 'package:loadup/features/edit_profile/logic/cubit/edit_profile_cubit.dart';
 import 'package:loadup/features/edit_profile/presentation/screens/edit_profile_screen.dart';
+import 'package:loadup/features/my_shipping/data/model/shipment_model.dart';
+import 'package:loadup/features/my_shipping/logic/cubit/pending_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/received_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
+import 'package:loadup/features/my_shipping/presentation/screens/pending_shipments_screen.dart';
+import 'package:loadup/features/my_shipping/presentation/screens/received_shipment_details_screen.dart';
 import 'package:loadup/features/my_shipping/presentation/screens/received_shipments_screen.dart';
+import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
 import 'package:loadup/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:loadup/features/profile/presentation/screens/profile_screen.dart';
 import 'package:loadup/features/get_started/presentation/screens/get_started_screen.dart';
@@ -35,8 +40,10 @@ import 'package:loadup/features/my_shipping/presentation/screens/sent_shipments_
 import 'package:loadup/features/reset_password/logic/cubit/reset_password_cubit.dart';
 import 'package:loadup/features/reset_password/presentation/screens/reset_password_screen.dart';
 import 'package:loadup/features/settings/presentation/screens/settings_screen.dart';
+import 'package:loadup/features/shipment_details/logic/cubit/checkpoints_cubit.dart';
 import 'package:loadup/features/shipment_details/presentation/screens/map_screen.dart';
 import 'package:loadup/features/shipment_details/presentation/screens/shipment_details_screen.dart';
+import 'package:loadup/features/wallet/logic/cubit/payment_cubit.dart';
 import 'package:loadup/features/wallet/presentation/screens/wallet_screen.dart';
 
 import '../public_widgets/custom_bottom_navigation_bar.dart';
@@ -48,9 +55,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => GetStartedScreen(),
         );
+
       case Routes.mapScreen:
         return MaterialPageRoute(
-          builder: (_) => MapScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<CheckpointsCubit>(),
+            child: const MapScreen(),
+          ),
         );
       case Routes.loginScreen:
         return MaterialPageRoute(
@@ -121,7 +132,10 @@ class AppRouter {
 
       case Routes.walletScreen:
         return MaterialPageRoute(
-          builder: (_) => WalletScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PaymentsCubit>(),
+            child: const WalletScreen(),
+          ),
         );
 
       case Routes.customBottomNavigationBar:
@@ -188,11 +202,24 @@ class AppRouter {
         );
 
       case Routes.centerSelectionScreen:
-        final isOrigin = settings.arguments as bool? ?? true;
+        final args = settings.arguments as Map<String, dynamic>? ?? {};
+        final isOrigin = args['isOrigin'] as bool? ?? true;
+        final governorateId = args['governorateId'] as int?;
+
+        if (governorateId == null) {
+          throw Exception("Governorate ID is required for center selection");
+        }
+
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<CentersCubit>(),
-            child: CenterSelectionScreen(isOrigin: isOrigin),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<ShipmentRequestCubit>()),
+              BlocProvider(create: (_) => getIt<CentersCubit>()),
+            ],
+            child: CenterSelectionScreen(
+              isOrigin: isOrigin,
+              governorateId: governorateId,
+            ),
           ),
         );
 
@@ -200,16 +227,46 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => SettingsScreen(),
         );
-      case Routes.shipmentDetailsScreen:
+      case Routes.sentShipmentDetailsScreen:
+        final shipment = settings.arguments as ShipmentDatum;
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<SentShipmentsCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<ApprovePriceCubit>(),
+              ),
+            ],
+            child: SentShipmentDetailsScreen(
+              shipment: shipment,
+            ),
+          ),
+        );
+
+      case Routes.receivedShipmentDetailsScreen:
+        final shipment = settings.arguments as ShipmentDatum;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<SentShipmentsCubit>(),
-            child: const ShipmentDetailsScreen(),
+            create: (context) => getIt<ReceivedShipmentsCubit>(),
+            child: ReceivedShipmentDetailsScreen(
+              shipment: shipment,
+            ),
           ),
         );
       case Routes.complaintsScreenSelector:
         return MaterialPageRoute(
           builder: (_) => ComplaintsScreenSelector(),
+        );
+
+      // في app_router.dart
+      case Routes.pendingShipmentsScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<PendingShipmentsCubit>(),
+            child: const PendingShipmentsScreen(),
+          ),
         );
 
       default:

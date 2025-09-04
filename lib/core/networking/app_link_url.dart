@@ -1,6 +1,8 @@
 class AppLinkUrl {
-  static const String baseUrl = 'http://10.0.2.2:8000';
-
+  // static const String baseUrl = 'http://10.0.2.2:8000';
+  // static const String baseUrl = 'http://192.168.189.1:8000';
+  static const String baseUrl = 'https://bitter-bobcats-sleep.loca.lt';
+  // static const String baseUrl = 'http://10.150.210.52:8000';
   static const String login = '/api/login';
   static const String signup = '/api/register';
   static const String logout = '/api/logout';
@@ -12,12 +14,19 @@ class AppLinkUrl {
   static const String getusers = '/api/users';
   static const String getprofile = '/api/user';
   static const String updateprofile = '/api/user/update-profile';
-  static const String getcenters = '/api/company-centers';
+  static const String getcenters = '/api/company-centers/all';
   static const String getreceivedshipments =
       '/api/shipments/my-received-shipments';
 
-  static const String getcomplaints = '/api/complaints';
+  static const String getcomplaints = '/api/complaints/get-my-complaints';
   static const String sendcomplaints = '/api/complaints';
+  static const String getCheckpoints = '/api/checkpoints';
+  static const String getPayments = '/api/payments';
+  static const String createPayment = '/api/payments';
+  static const String getpendingShipments =
+      '/api/shipments/my-customer-pending';
+
+  static const String approvePrice = '/api/shipments/approve-price';
 
   static String updateComplaint(int id) => '/api/complaints/$id';
 

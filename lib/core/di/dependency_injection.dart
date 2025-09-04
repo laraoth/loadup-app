@@ -39,18 +39,30 @@ import 'package:loadup/features/create_shipment/logic/cubit/users_cubit.dart';
 import 'package:loadup/features/edit_profile/data/datasources/edit_profile_remote_data_source.dart';
 import 'package:loadup/features/edit_profile/data/repos/edit_profile_repo.dart';
 import 'package:loadup/features/edit_profile/logic/cubit/edit_profile_cubit.dart';
-import 'package:loadup/features/my_shipping/data/datasource/Received_shipments_remote_data_source.dart';
+import 'package:loadup/features/my_shipping/data/datasource/pending_shipments_remote_data_source.dart';
+import 'package:loadup/features/my_shipping/data/datasource/received_shipments_remote_data_source.dart';
 import 'package:loadup/features/my_shipping/data/datasource/sent_shipments_remote_data_source.dart';
+import 'package:loadup/features/my_shipping/data/repo/pending_shipments_repo.dart';
 import 'package:loadup/features/my_shipping/data/repo/received_shipments_repo.dart';
 import 'package:loadup/features/my_shipping/data/repo/sent_shipments_repo.dart';
+import 'package:loadup/features/my_shipping/logic/cubit/pending_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/received_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
+import 'package:loadup/features/payment/data/datasources/create_payment_remote_data_source.dart';
+import 'package:loadup/features/payment/data/repos/create_payment_repo.dart';
+import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
 import 'package:loadup/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:loadup/features/profile/data/repos/profile_repo.dart';
 import 'package:loadup/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:loadup/features/reset_password/data/datasources/reset_password_remote_data_source.dart';
 import 'package:loadup/features/reset_password/data/repos/reset_password_repo.dart';
 import 'package:loadup/features/reset_password/logic/cubit/reset_password_cubit.dart';
+import 'package:loadup/features/shipment_details/data/datasources/checkpoints_remote_data_source.dart';
+import 'package:loadup/features/shipment_details/data/repos/checkpoints_repo.dart';
+import 'package:loadup/features/shipment_details/logic/cubit/checkpoints_cubit.dart';
+import 'package:loadup/features/wallet/data/datasources/payment_remote_data_source.dart';
+import 'package:loadup/features/wallet/data/repos/payment_repo.dart';
+import 'package:loadup/features/wallet/logic/cubit/payment_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -207,10 +219,6 @@ Future<void> setupGetit() async {
     () => CentersRepo(networkInfo: getIt(), centersRemoteDataSource: getIt()),
   );
 
-  getIt.registerFactory<ReceivedShipmentsCubit>(
-    () => ReceivedShipmentsCubit(getIt()),
-  );
-
   getIt.registerLazySingleton<ReceivedShipmentsRemoteDataSource>(
     () => ReceivedShipmentsRemoteDataSourceImp(dio: getIt()),
   );
@@ -218,6 +226,10 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<ReceivedShipmentsRepo>(
     () => ReceivedShipmentsRepo(
         networkInfo: getIt(), receivedShipmentsRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<ReceivedShipmentsCubit>(
+    () => ReceivedShipmentsCubit(getIt()),
   );
 
   getIt.registerFactory<ComplaintsCubit>(
@@ -269,5 +281,57 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<DeleteComplaintRepo>(
     () => DeleteComplaintRepo(
         networkInfo: getIt(), deleteComplaintRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<CheckpointsCubit>(() => CheckpointsCubit(getIt()));
+
+  getIt.registerLazySingleton<CheckpointsRemoteDataSource>(
+    () => CheckpointsRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<CheckpointsRepo>(
+    () => CheckpointsRepo(
+        networkInfo: getIt(), checkpointsRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<PaymentsCubit>(
+    () => PaymentsCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<PaymentsRemoteDataSource>(
+    () => PaymentsRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<PaymentsRepo>(
+    () => PaymentsRepo(
+      networkInfo: getIt(),
+      remoteDataSource: getIt(),
+    ),
+  );
+
+  getIt.registerFactory<ApprovePriceCubit>(() => ApprovePriceCubit(getIt()));
+
+  getIt.registerLazySingleton<ApprovePriceRemoteDataSource>(
+    () => ApprovePriceRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<ApprovePriceRepo>(
+    () => ApprovePriceRepo(
+      networkInfo: getIt(),
+      remoteDataSource: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<PendingShipmentsRemoteDataSource>(
+    () => PendingShipmentsRemoteDataSourceImp(dio: getIt()),
+  );
+
+  getIt.registerLazySingleton<PendingShipmentsRepo>(
+    () => PendingShipmentsRepo(
+        networkInfo: getIt(), pendingShipmentsRemoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<PendingShipmentsCubit>(
+    () => PendingShipmentsCubit(getIt()),
   );
 }

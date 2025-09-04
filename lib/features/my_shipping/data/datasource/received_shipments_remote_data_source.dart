@@ -5,7 +5,7 @@ import 'package:loadup/features/my_shipping/data/model/shipment_model.dart';
 import 'package:loadup/main.dart';
 
 abstract class ReceivedShipmentsRemoteDataSource {
-  Future<ShipmentsModel> getreceivedshipments();
+  Future<ShipmentsModel> getreceivedshipments({String? status});
 }
 
 class ReceivedShipmentsRemoteDataSourceImp
@@ -15,11 +15,11 @@ class ReceivedShipmentsRemoteDataSourceImp
   ReceivedShipmentsRemoteDataSourceImp({required this.dio});
 
   @override
-  Future<ShipmentsModel> getreceivedshipments() async {
+  Future<ShipmentsModel> getreceivedshipments({String? status}) async {
     final result = await dio.dioGetMethod(
       endPoint: AppLinkUrl.getreceivedshipments,
       token: storage.getString('token'),
-      queryParameters: {},
+      queryParameters: status != null ? {"filters[status]": status} : {},
     );
 
     return result.fold(

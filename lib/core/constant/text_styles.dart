@@ -1,70 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../constant/colors.dart';
 
 class AppTextStyles {
-  static TextStyle font32WhiteBold = TextStyle(
-    fontSize: 32.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  );
+  // نصوص كبيرة
+  static TextStyle font32Bold(BuildContext context) => TextStyle(
+        fontSize: 32.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font32BlackBold = TextStyle(
-    fontSize: 32.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
+  static TextStyle font24Bold(BuildContext context) => TextStyle(
+        fontSize: 24.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font24WhiteBold = TextStyle(
-    fontSize: 24.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  );
+  // نصوص متوسطة
+  static TextStyle font18Bold(BuildContext context) => TextStyle(
+        fontSize: 18.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font24BlackBold = TextStyle(
-    fontSize: 24.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
+  static TextStyle font16Bold(BuildContext context) => TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font18BlackBold = TextStyle(
-    fontSize: 18.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
+  static TextStyle font16Regular(BuildContext context) => TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font16BlackBold = TextStyle(
-    fontSize: 16.sp,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
+  // نصوص صغيرة
+  static TextStyle font14Regular(BuildContext context) => TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.normal,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font16BlackRegular = TextStyle(
-    fontSize: 16.sp,
-    fontWeight: FontWeight.normal,
-    color: Colors.black,
-  );
+  static TextStyle font11Regular(BuildContext context) => TextStyle(
+        fontSize: 11.sp,
+        fontWeight: FontWeight.normal,
+        color: AppColors.text(context),
+      );
 
-  static TextStyle font14GreyRegular = TextStyle(
-    fontSize: 14.sp,
-    fontWeight: FontWeight.normal,
-    color: Color(0xFF94A3B8),
-  );
-
-  static TextStyle font14WhiteRegular = TextStyle(
-    fontSize: 14.sp,
-    fontWeight: FontWeight.normal,
-    color: Colors.white,
-  );
-
-  static TextStyle font14BlackRegular = TextStyle(
-    fontSize: 14.sp,
-    fontWeight: FontWeight.normal,
-    color: Colors.black,
-  );
-
-  static TextStyle font11BlackRegular = TextStyle(
-    fontSize: 11.sp,
-    fontWeight: FontWeight.normal,
-    color: Colors.black,
-  );
+  // نصوص رمادية (لـ hint أو secondary)
+  static TextStyle font14Grey(BuildContext context) => TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.normal,
+        color: AppColors.hintText(context),
+      );
 }
