@@ -10,13 +10,10 @@ class ComplaintsCubit extends Cubit<ComplaintsState> {
   final ComplaintsRepo _complaintsRepo;
   ComplaintsCubit(this._complaintsRepo) : super(ComplaintsInitial());
 
-  int _currentPage = 1;
-  int get currentPage => _currentPage;
-
-  void getcomplaints({int page = 1}) async {
+  void getcomplaints() async {
     emit(ComplaintsLoading());
 
-    final response = await _complaintsRepo.getcomplaints(page: page);
+    final response = await _complaintsRepo.getcomplaints();
 
     response.fold(
       (fail) {
@@ -24,7 +21,6 @@ class ComplaintsCubit extends Cubit<ComplaintsState> {
       },
       (getComplaintsResponse) {
         if (!isClosed) {
-          _currentPage = page;
           emit(ComplaintsSuccess(
             getComplaintsResponse.message,
             getComplaintsResponse,
@@ -32,15 +28,5 @@ class ComplaintsCubit extends Cubit<ComplaintsState> {
         }
       },
     );
-  }
-
-  void nextPage() {
-    getcomplaints(page: _currentPage + 1);
-  }
-
-  void previousPage() {
-    if (_currentPage > 1) {
-      getcomplaints(page: _currentPage - 1);
-    }
   }
 }

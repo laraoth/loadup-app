@@ -173,22 +173,6 @@ class ComplaintsListWidget extends StatelessWidget {
                 },
               ),
               verticalSpace(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: complaintsCubit.currentPage > 1
-                        ? () => complaintsCubit.previousPage()
-                        : null,
-                    child: Text(context.tr("previous")),
-                  ),
-                  Text("${context.tr("page")} ${complaintsCubit.currentPage}"),
-                  TextButton(
-                    onPressed: () => complaintsCubit.nextPage(),
-                    child: Text(context.tr("next")),
-                  ),
-                ],
-              ),
             ],
           );
         } else {

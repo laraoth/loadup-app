@@ -5,7 +5,7 @@ import 'package:loadup/features/complaints/data/models/complaints_model.dart';
 import 'package:loadup/main.dart';
 
 abstract class ComplaintsRemoteDataSource {
-  Future<ComplaintsModel> getcomplaints({int page = 1});
+  Future<ComplaintsModel> getcomplaints();
 }
 
 class ComplaintsRemoteDataSourceImp implements ComplaintsRemoteDataSource {
@@ -14,24 +14,23 @@ class ComplaintsRemoteDataSourceImp implements ComplaintsRemoteDataSource {
   ComplaintsRemoteDataSourceImp({required this.dio});
 
   @override
-  Future<ComplaintsModel> getcomplaints({int page = 1}) async {
+  Future<ComplaintsModel> getcomplaints() async {
     final result = await dio.dioGetMethod(
-        endPoint: AppLinkUrl.getcomplaints,
-        token: storage.getString('token'),
-        queryParameters: {
-          "page": 1,
-          "per_page": 10,
-          "search": "",
-          "shipment_id": "",
-          "customer_id": "",
-          "sort_by": "created_at",
-          "sort_order": "desc"
-        });
-
+      endPoint: AppLinkUrl.getcomplaints,
+      token: storage.getString('token'),
+      queryParameters: {},
+    );
     return result.fold(
       (fail) => throw ServerException(fail.message),
-      (getComplaintsResponse) =>
-          ComplaintsModel.fromJson(getComplaintsResponse),
+      (jsonResponse) {
+        try {
+          return ComplaintsModel.fromJson(jsonResponse);
+        } catch (e, s) {
+          print("❌ Parsing error: $e");
+          print("Stack trace: $s");
+          throw ServerException("Parsing error: $e");
+        }
+      },
     );
   }
 }

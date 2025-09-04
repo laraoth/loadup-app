@@ -14,11 +14,11 @@ class ComplaintsRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, ComplaintsModel>> getcomplaints({int page = 1}) async {
+  Future<Either<Failure, ComplaintsModel>> getcomplaints() async {
     if (await networkInfo.isConnected) {
       try {
         final getComplaintsResponse =
-            await complaintsRemoteDataSource.getcomplaints(page: page);
+            await complaintsRemoteDataSource.getcomplaints();
 
         return Right(getComplaintsResponse);
       } on ServerException catch (e) {
