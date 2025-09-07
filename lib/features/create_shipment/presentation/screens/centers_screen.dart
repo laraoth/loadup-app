@@ -8,7 +8,7 @@ import 'package:loadup/features/create_shipment/logic/cubit/shipment_request_cub
 
 class CenterSelectionScreen extends StatefulWidget {
   final bool isOrigin;
-  final int governorateId; // أضفنا هذا
+  final int governorateId;
 
   const CenterSelectionScreen({
     Key? key,
@@ -36,7 +36,6 @@ class _CenterSelectionScreenState extends State<CenterSelectionScreen> {
           if (state is CentersLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is CentersSuccess) {
-            // الفلترة باستخدام governorateId مباشرة
             final List<CenterDatum> centers = state.centersModel.data
                 .where((center) => center.governorateId == widget.governorateId)
                 .toList();

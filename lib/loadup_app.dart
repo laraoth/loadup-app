@@ -38,7 +38,7 @@ class LoadUpApp extends StatelessWidget {
                     GlobalCupertinoLocalizations.delegate,
                   ],
                   onGenerateRoute: appRouter.generateRoute,
-                  initialRoute: Routes.complaintsScreenSelector,
+                  initialRoute: Routes.getStartedScreen,
                   theme: AppThemes.lightTheme,
                   darkTheme: AppThemes.darkTheme,
                   themeMode: themeMode,

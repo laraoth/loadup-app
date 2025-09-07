@@ -32,26 +32,26 @@ class _GovernorateSelectionScreenState
       appBar: AppBar(title: Text(context.tr('Choose the Governorate'))),
       body: Column(
         children: [
-          // 🔍 مربع البحث
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: cubit.searchController,
-              decoration: InputDecoration(
-                hintText: context.tr("Search governorates..."),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    cubit
-                        .searchGovernorates(cubit.searchController.text.trim());
-                  },
-                ),
-              ),
-              onSubmitted: (value) {
-                cubit.searchGovernorates(value.trim());
-              },
-            ),
-          ),
+          // // 🔍 مربع البحث
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: TextField(
+          //     controller: cubit.searchController,
+          //     decoration: InputDecoration(
+          //       hintText: context.tr("Search governorates..."),
+          //       suffixIcon: IconButton(
+          //         icon: const Icon(Icons.search),
+          //         onPressed: () {
+          //           cubit
+          //               .searchGovernorates(cubit.searchController.text.trim());
+          //         },
+          //       ),
+          //     ),
+          //     onSubmitted: (value) {
+          //       cubit.searchGovernorates(value.trim());
+          //     },
+          //   ),
+          // ),
 
           Expanded(
             child: BlocBuilder<GovernoratesCubit, GovernoratesState>(

@@ -12,42 +12,32 @@ class HomeAppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Text(context.tr('hello'), style: AppTextStyles.font18Bold(context)),
-            BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (context, state) {
-                if (state is ProfileLoading) {
-                  return const LoadingWidget();
-                } else if (state is ProfileError) {
-                  return Text(
-                    context.tr('user'),
-                    style: AppTextStyles.font18Bold(context)
-                        .copyWith(color: AppColors.text(context)),
-                  );
-                } else if (state is ProfileSuccess) {
-                  final profile = state.profileModel.data;
-                  return Text(
-                    profile.name ?? context.tr('user'),
-                    style: AppTextStyles.font18Bold(context)
-                        .copyWith(color: AppColors.text(context)),
-                  );
-                }
-                return Text(
-                  context.tr('user'),
-                  style: AppTextStyles.font18Bold(context)
-                      .copyWith(color: AppColors.text(context)),
-                );
-              },
-            ),
-          ],
-        ),
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.black12,
-          child: Icon(Icons.notifications, color: AppColors.icon(context)),
+        Text(context.tr('hello'), style: AppTextStyles.font18Bold(context)),
+        BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return const LoadingWidget();
+            } else if (state is ProfileError) {
+              return Text(
+                context.tr('user'),
+                style: AppTextStyles.font18Bold(context)
+                    .copyWith(color: AppColors.text(context)),
+              );
+            } else if (state is ProfileSuccess) {
+              final profile = state.profileModel.data;
+              return Text(
+                profile.name ?? context.tr('user'),
+                style: AppTextStyles.font18Bold(context)
+                    .copyWith(color: AppColors.text(context)),
+              );
+            }
+            return Text(
+              context.tr('user'),
+              style: AppTextStyles.font18Bold(context)
+                  .copyWith(color: AppColors.text(context)),
+            );
+          },
         ),
       ],
     );

@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loadup/core/constant/colors.dart';
 import 'package:loadup/core/constant/text_styles.dart';
+import 'package:loadup/core/helpers/extentions.dart';
 import 'package:loadup/core/helpers/spacing.dart';
 import 'package:loadup/core/helpers/translation_extension.dart';
+import 'package:loadup/core/routing/routes.dart';
 import 'package:loadup/features/my_shipping/data/model/shipment_model.dart';
 import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
 import 'package:loadup/features/payment/logic/cubit/create_payment_state.dart';
@@ -78,7 +80,6 @@ class SentShipmentDetailsScreen extends StatelessWidget {
 
                 verticalSpace(16),
 
-                /// --- السعر + زر قبول ---
                 DetailItemWidget(
                   title: context.tr("price"),
                   value: shipment.price != null
@@ -94,7 +95,7 @@ class SentShipmentDetailsScreen extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          final pageContext = context; // خزن context تبع الشاشة
+                          final pageContext = context;
                           showDialog(
                             context: context,
                             builder: (dialogContext) {
@@ -105,7 +106,7 @@ class SentShipmentDetailsScreen extends StatelessWidget {
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
-                                        Navigator.pop(dialogContext), // غلق
+                                        Navigator.pop(dialogContext),
                                     child: Text(context.tr("cancel")),
                                   ),
                                   ElevatedButton(
@@ -143,13 +144,50 @@ class SentShipmentDetailsScreen extends StatelessWidget {
 
                 verticalSpace(20),
 
-                /// --- QR Code ---
                 Center(
                   child: QrImageView(
                     data: qrRawString,
                     version: QrVersions.auto,
                     size: 250.0,
                     backgroundColor: Colors.white,
+                  ),
+                ),
+
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        if (shipment.groupId != null) {
+                          context.pushNamed(
+                            Routes.checkpointsScreen,
+                            arguments: shipment.groupId,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(context.tr(
+                                    "your_shipment_will_be_on_its_way_soon."))),
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        Icons.location_pin,
+                        size: 40,
+                        color: AppColors.primaryOrange,
+                      ),
+                    ),
                   ),
                 ),
               ],

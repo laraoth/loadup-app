@@ -14,10 +14,18 @@ class CheckpointsRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, CheckpointsModel>> getCheckpoints() async {
+  Future<Either<Failure, CheckpointsModel>> getCheckpoints({
+    int page = 1,
+    int perPage = 10,
+    required int groupId,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final response = await checkpointsRemoteDataSource.getCheckpoints();
+        final response = await checkpointsRemoteDataSource.getCheckpoints(
+          page: page,
+          perPage: perPage,
+          groupId: groupId,
+        );
         return Right(response);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));

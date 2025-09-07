@@ -4,36 +4,39 @@
 
 import 'dart:convert';
 
-ShipmentRequestModel shipmentRequestModelFromJson(String str) => ShipmentRequestModel.fromJson(json.decode(str));
+ShipmentRequestModel shipmentRequestModelFromJson(String str) =>
+    ShipmentRequestModel.fromJson(json.decode(str));
 
-String shipmentRequestModelToJson(ShipmentRequestModel data) => json.encode(data.toJson());
+String shipmentRequestModelToJson(ShipmentRequestModel data) =>
+    json.encode(data.toJson());
 
 class ShipmentRequestModel {
-    int receiverId;
-    String typeOfCargo;
-    double weight;
-    String originAddress;
-    String destinationAddress;
-    String specialHandlingInstructions;
-    int originGovernorateId;
-    int destinationGovernorateId;
-    int originCenterId;
-    int destinationCenterId;
+  int receiverId;
+  String typeOfCargo;
+  double weight;
+  String originAddress;
+  String destinationAddress;
+  String? specialHandlingInstructions;
+  int originGovernorateId;
+  int destinationGovernorateId;
+  int originCenterId;
+  int destinationCenterId;
 
-    ShipmentRequestModel({
-        required this.receiverId,
-        required this.typeOfCargo,
-        required this.weight,
-        required this.originAddress,
-        required this.destinationAddress,
-        required this.specialHandlingInstructions,
-        required this.originGovernorateId,
-        required this.destinationGovernorateId,
-        required this.originCenterId,
-        required this.destinationCenterId,
-    });
+  ShipmentRequestModel({
+    required this.receiverId,
+    required this.typeOfCargo,
+    required this.weight,
+    required this.originAddress,
+    required this.destinationAddress,
+    this.specialHandlingInstructions,
+    required this.originGovernorateId,
+    required this.destinationGovernorateId,
+    required this.originCenterId,
+    required this.destinationCenterId,
+  });
 
-    factory ShipmentRequestModel.fromJson(Map<String, dynamic> json) => ShipmentRequestModel(
+  factory ShipmentRequestModel.fromJson(Map<String, dynamic> json) =>
+      ShipmentRequestModel(
         receiverId: json["receiver_id"],
         typeOfCargo: json["type_of_cargo"],
         weight: json["weight"]?.toDouble(),
@@ -44,9 +47,9 @@ class ShipmentRequestModel {
         destinationGovernorateId: json["destination_governorate_id"],
         originCenterId: json["origin_center_id"],
         destinationCenterId: json["destination_center_id"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "receiver_id": receiverId,
         "type_of_cargo": typeOfCargo,
         "weight": weight,
@@ -57,5 +60,5 @@ class ShipmentRequestModel {
         "destination_governorate_id": destinationGovernorateId,
         "origin_center_id": originCenterId,
         "destination_center_id": destinationCenterId,
-    };
+      };
 }

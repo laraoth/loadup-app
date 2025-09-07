@@ -21,9 +21,11 @@ class Routes {
   static const String receivedShipmentsScreen = '/receivedShipmentsScreen';
   static const String complaintsViewScreen = '/complaintsViewScreen';
   static const String complaintsScreenSelector = '/complaintsScreenSelector';
-  static const String mapScreen = '/mapScreen';
+  // static const String mapScreen = '/mapScreen';
   static const String createPaymentScreen = '/createPaymentScreen';
   static const String receivedShipmentDetailsScreen =
       '/receivedShipmentDetailsScreen';
   static const String pendingShipmentsScreen = '/pendingShipmentsScreen';
+  static const String checkpointsScreen = '/checkpointsScreen';
+  static const String myPaymentsScreen = '/myPaymentsScreen';
 }

@@ -35,18 +35,18 @@ class _AppearanceAndLanguageAndNotificationWidgetState
           _showLanguageDialog(context);
         },
       },
-      {
-        'title': context.tr("notification"),
-        'trailing': Switch(
-          value: notificationsEnabled,
-          onChanged: (value) {
-            setState(() {
-              notificationsEnabled = value;
-            });
-          },
-        ),
-        'onTap': () {},
-      },
+      // {
+      //   'title': context.tr("notification"),
+      //   'trailing': Switch(
+      //     value: notificationsEnabled,
+      //     onChanged: (value) {
+      //       setState(() {
+      //         notificationsEnabled = value;
+      //       });
+      //     },
+      //   ),
+      //   'onTap': () {},
+      // },
     ];
 
     return ListView(

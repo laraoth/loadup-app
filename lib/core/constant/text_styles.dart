@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constant/colors.dart';
 
 class AppTextStyles {
-  // نصوص كبيرة
   static TextStyle font32Bold(BuildContext context) => TextStyle(
         fontSize: 32.sp,
         fontWeight: FontWeight.bold,
@@ -16,7 +15,6 @@ class AppTextStyles {
         color: AppColors.text(context),
       );
 
-  // نصوص متوسطة
   static TextStyle font18Bold(BuildContext context) => TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.bold,
@@ -35,7 +33,6 @@ class AppTextStyles {
         color: AppColors.text(context),
       );
 
-  // نصوص صغيرة
   static TextStyle font14Regular(BuildContext context) => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.normal,
@@ -48,7 +45,6 @@ class AppTextStyles {
         color: AppColors.text(context),
       );
 
-  // نصوص رمادية (لـ hint أو secondary)
   static TextStyle font14Grey(BuildContext context) => TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.normal,

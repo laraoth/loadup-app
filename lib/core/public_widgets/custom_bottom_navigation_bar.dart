@@ -7,9 +7,9 @@ import 'package:loadup/features/auth/logic/cubit/logout_cubit.dart';
 import 'package:loadup/features/home/presentation/screens/home_screen.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/presentation/screens/sent_shipments_screen.dart';
+import 'package:loadup/features/payment/presentation/screens/payments_screen.dart';
 import 'package:loadup/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:loadup/features/profile/presentation/screens/profile_screen.dart';
-import 'package:loadup/features/wallet/presentation/screens/wallet_screen.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
@@ -36,7 +36,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         create: (_) => getIt<SentShipmentsCubit>()..getshipments(),
         child: const MyShippingScreen(),
       ),
-      const WalletScreen(),
+      const MyPaymentsScreen(),
       MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => getIt<ProfileCubit>()..getprofile()),

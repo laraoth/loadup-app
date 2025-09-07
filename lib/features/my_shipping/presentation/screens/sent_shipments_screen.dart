@@ -71,8 +71,8 @@ class _MyShippingScreenState extends State<MyShippingScreen> {
                   style: AppTextStyles.font24Bold(context),
                 ),
               ),
-              verticalSpace(20),
-              SearchBarWidget(),
+              // verticalSpace(20),
+              // SearchBarWidget(),
               verticalSpace(30),
               ShippingFilterTabsWidget(
                 selectedIndex: selectedTabIndex,
@@ -96,13 +96,12 @@ class _MyShippingScreenState extends State<MyShippingScreen> {
                     } else if (state is SentShipmentsSuccess) {
                       final shipments = state.shipmentsModel.data;
 
-                      // ---> هنا: نفس منطق ReceivedScreen
                       final filteredShipments = selectedTabIndex == 0
                           ? shipments
                           : shipments.where((s) {
                               final sStatus =
                                   getStatusFromString(s.status ?? '');
-                              // قارن مع القيمة المناسبة من enum حسب الفهرس
+
                               return sStatus == Status.values[selectedTabIndex];
                             }).toList();
 

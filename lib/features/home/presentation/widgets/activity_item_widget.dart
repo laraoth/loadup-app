@@ -30,7 +30,7 @@ class ActivityItemWidget extends StatelessWidget {
           Expanded(
             child: Text(
               code,
-              style: TextStyle(color: AppColors.text(context)),
+              style: TextStyle(color: AppColors.text(context), fontSize: 12),
             ),
           ),
           Container(
@@ -41,7 +41,7 @@ class ActivityItemWidget extends StatelessWidget {
             ),
             child: Text(
               status,
-              style: TextStyle(color: textColor, fontSize: 12),
+              style: TextStyle(color: textColor, fontSize: 10),
             ),
           )
         ],

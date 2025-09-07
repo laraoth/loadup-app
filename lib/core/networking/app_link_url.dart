@@ -1,7 +1,7 @@
 class AppLinkUrl {
   // static const String baseUrl = 'http://10.0.2.2:8000';
   // static const String baseUrl = 'http://192.168.189.1:8000';
-  static const String baseUrl = 'https://long-hats-exist.loca.lt';
+  static const String baseUrl = "https://c30db6470741.ngrok-free.app";
   // static const String baseUrl = 'http://10.150.210.52:8000';
   static const String login = '/api/login';
   static const String signup = '/api/register';
@@ -25,8 +25,10 @@ class AppLinkUrl {
   static const String createPayment = '/api/payments';
   static const String getpendingShipments =
       '/api/shipments/my-customer-pending';
+  static const String myPayments = '/api/shipments/my-payments';
 
   static const String approvePrice = '/api/shipments/approve-price';
+  static const String groupTrackings = '/api/group-trackings';
 
   static String updateComplaint(int id) => '/api/complaints/$id';
 

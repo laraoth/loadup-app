@@ -17,15 +17,12 @@ class GetStartedScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية (صورة الشاحنة)
           SizedBox.expand(
             child: Image.asset(
               AppImages.getstarted,
               fit: BoxFit.cover,
             ),
           ),
-
-          // طبقة التمويه والزر
           Container(
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.4),
@@ -33,8 +30,6 @@ class GetStartedScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Spacer(flex: 2),
-
-                // النص في المنتصف تقريباً
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Text(
@@ -43,10 +38,7 @@ class GetStartedScreen extends StatelessWidget {
                     style: AppTextStyles.font32Bold(context),
                   ),
                 ),
-
                 const Spacer(flex: 1),
-
-                // الزر بأسفل الشاشة مع مسافة
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 80.w),
                   child: ButtonWidget(
@@ -54,15 +46,13 @@ class GetStartedScreen extends StatelessWidget {
                     onTap: () {
                       context.pushNamed(Routes.loginScreen);
                     },
-                    // backgroundColor: AppColors.primaryOrange,
                     radius: 12.r,
                     textStyle: AppTextStyles.font24Bold(context),
                     width: double.infinity,
                     height: 50.h,
                   ),
                 ),
-
-                verticalSpace(80) // مسافة تحت الزر
+                verticalSpace(80)
               ],
             ),
           ),

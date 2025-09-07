@@ -18,6 +18,8 @@ class TextFieldWidget extends StatelessWidget {
   final bool readOnly;
   final void Function()? onTap;
 
+  final FormFieldValidator<String>? validator;
+
   const TextFieldWidget({
     super.key,
     required this.controller,
@@ -33,11 +35,11 @@ class TextFieldWidget extends StatelessWidget {
     this.onPressedPrefixIcon,
     this.readOnly = false,
     this.onTap,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    // الألوان حسب الثيم
     final bgColor = AppColors.cardBackground(context);
     final textColor = AppColors.text(context);
     final hintColor = AppColors.hintText(context);
@@ -61,10 +63,19 @@ class TextFieldWidget extends StatelessWidget {
         onTap: onTap,
         keyboardType: keyboardType,
         cursorColor: AppColors.primaryOrange,
-        validator: (value) => value!.isEmpty ? 'Can\'t Be Empty' : null,
         controller: controller,
         obscureText: obscureText,
         style: AppTextStyles.font14Regular(context).copyWith(color: textColor),
+
+  
+        validator: validator ??
+            (value) {
+              if (value == null || value.isEmpty) {
+                return 'Can\'t Be Empty';
+              }
+              return null;
+            },
+
         decoration: InputDecoration(
           filled: true,
           fillColor: bgColor,

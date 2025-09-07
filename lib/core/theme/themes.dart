@@ -6,8 +6,8 @@ class AppThemes {
     brightness: Brightness.light,
     fontFamily: 'Poppins',
     primaryColor: AppColors.primaryOrange,
-    scaffoldBackgroundColor: const Color(0xFFF6F6F6), // رمادي فاتح للخلفية
-    cardColor: Colors.white, // الكروت أوضح من الخلفية
+    scaffoldBackgroundColor: const Color(0xFFF6F6F6),
+    cardColor: Colors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFFF6F6F6),
       foregroundColor: Color(0xFF1E1E1E),
@@ -16,8 +16,8 @@ class AppThemes {
     ),
     iconTheme: const IconThemeData(color: Color(0xFF1E1E1E)),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFF1E1E1E)), // نص أساسي
-      bodyMedium: TextStyle(color: Colors.black54), // نص ثانوي
+      bodyLarge: TextStyle(color: Color(0xFF1E1E1E)),
+      bodyMedium: TextStyle(color: Colors.black54),
     ),
     colorScheme: const ColorScheme.light(
       primary: AppColors.primaryOrange,
@@ -35,8 +35,8 @@ class AppThemes {
     brightness: Brightness.dark,
     fontFamily: 'Poppins',
     primaryColor: AppColors.primaryOrange,
-    scaffoldBackgroundColor: const Color(0xFF121212), // أغمق لتمييز الخلفية
-    cardColor: const Color(0xFF1E1E1E), // الكروت أفتح شوي من الخلفية
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    cardColor: const Color(0xFF1E1E1E),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF1E1E1E),
       foregroundColor: Colors.white,
@@ -45,8 +45,8 @@ class AppThemes {
     ),
     iconTheme: const IconThemeData(color: Colors.white),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white), // نص أساسي
-      bodyMedium: TextStyle(color: Colors.white70), // نص ثانوي
+      bodyLarge: TextStyle(color: Colors.white),
+      bodyMedium: TextStyle(color: Colors.white70),
     ),
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primaryOrange,
@@ -55,7 +55,7 @@ class AppThemes {
       onSecondary: Colors.white,
       background: Color(0xFF121212),
       onBackground: Colors.white,
-      surface: Color(0xFF1E1E1E), // أوضح من الخلفية
+      surface: Color(0xFF1E1E1E),
       onSurface: Colors.white,
     ),
   );

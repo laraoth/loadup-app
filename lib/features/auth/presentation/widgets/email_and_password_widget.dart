@@ -59,12 +59,14 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
           verticalSpace(40),
           BlocConsumer<LoginCubit, LoginState>(
             listener: (context, state) {
-              if (state is LoginSuccess) {
+              if (state is LoginAuthenticated) {
+                // عرض رسالة النجاح
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    SnackBar(content: Text(state.message)),
+                    const SnackBar(content: Text("Logged in successfully")),
                   );
+
                 context.pushReplacementNamed(Routes.customBottomNavigationBar);
               } else if (state is LoginError) {
                 ScaffoldMessenger.of(context)

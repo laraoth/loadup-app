@@ -10,10 +10,18 @@ import 'package:loadup/core/public_widgets/text_field_widget.dart';
 import 'package:loadup/core/routing/routes.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_cubit.dart';
 import 'package:loadup/features/auth/logic/cubit/signup_state.dart';
-import 'package:loadup/core/helpers/translation_extension.dart'; // لازم يكون موجود
+import 'package:loadup/core/helpers/translation_extension.dart';
 
-class UserInfoWidget extends StatelessWidget {
+class UserInfoWidget extends StatefulWidget {
   const UserInfoWidget({super.key});
+
+  @override
+  State<UserInfoWidget> createState() => _UserInfoWidgetState();
+}
+
+class _UserInfoWidgetState extends State<UserInfoWidget> {
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
   Future<void> _selectBirthDate(BuildContext context) async {
     context.read<SignUpCubit>().pickBirthDate(context);
@@ -64,8 +72,10 @@ class UserInfoWidget extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    suffixIcon: Icon(Icons.calendar_today,
-                        color: AppColors.primaryOrange),
+                    suffixIcon: Icon(
+                      Icons.calendar_today,
+                      color: AppColors.primaryOrange,
+                    ),
                   ),
                   child: Text(
                     selectedBirthDate == null
@@ -93,50 +103,46 @@ class UserInfoWidget extends StatelessWidget {
             prefixIconColor: AppColors.primaryOrange,
           ),
           verticalSpace(24),
-          StatefulBuilder(
-            builder: (context, setState) {
-              bool isVisible = false;
-              return Column(
-                children: [
-                  TextFieldWidget(
-                    controller: signupCubit.passwordController,
-                    hintText: context.tr("password"),
-                    labelText: context.tr("password"),
-                    prefixIcon: Icons.lock,
-                    prefixIconColor: AppColors.primaryOrange,
-                    obscureText: !isVisible,
-                    suffixIcon: isVisible
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    onPressedSuffixIcon: () {
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
-                    },
-                    suffixIconColor: AppColors.primaryOrange,
-                  ),
-                  verticalSpace(24),
-                  TextFieldWidget(
-                    controller: signupCubit.passwordConfirmationController,
-                    hintText: context.tr("confirm_password"),
-                    labelText: context.tr("confirm_password"),
-                    prefixIcon: Icons.lock,
-                    prefixIconColor: AppColors.primaryOrange,
-                    obscureText: !isVisible,
-                    suffixIcon: isVisible
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    onPressedSuffixIcon: () {
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
-                    },
-                    suffixIconColor: AppColors.primaryOrange,
-                  ),
-                ],
-              );
+
+     
+          TextFieldWidget(
+            controller: signupCubit.passwordController,
+            hintText: context.tr("password"),
+            labelText: context.tr("password"),
+            prefixIcon: Icons.lock,
+            prefixIconColor: AppColors.primaryOrange,
+            obscureText: !isPasswordVisible,
+            suffixIcon: isPasswordVisible
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+            onPressedSuffixIcon: () {
+              setState(() {
+                isPasswordVisible = !isPasswordVisible;
+              });
             },
+            suffixIconColor: AppColors.primaryOrange,
           ),
+          verticalSpace(24),
+
+     
+          TextFieldWidget(
+            controller: signupCubit.passwordConfirmationController,
+            hintText: context.tr("confirm_password"),
+            labelText: context.tr("confirm_password"),
+            prefixIcon: Icons.lock,
+            prefixIconColor: AppColors.primaryOrange,
+            obscureText: !isConfirmPasswordVisible,
+            suffixIcon: isConfirmPasswordVisible
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+            onPressedSuffixIcon: () {
+              setState(() {
+                isConfirmPasswordVisible = !isConfirmPasswordVisible;
+              });
+            },
+            suffixIconColor: AppColors.primaryOrange,
+          ),
+
           verticalSpace(40),
           BlocConsumer<SignUpCubit, SignupState>(
             listener: (context, state) {
@@ -144,7 +150,7 @@ class UserInfoWidget extends StatelessWidget {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text(state.message)));
-                context.pushNamed(Routes.homeScreen);
+                context.pushNamed(Routes.customBottomNavigationBar);
               } else if (state is SignUpError) {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
@@ -153,7 +159,7 @@ class UserInfoWidget extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is SignUpLoading) {
-                return LoadingWidget();
+                return const LoadingWidget();
               } else {
                 return ButtonWidget(
                   title: context.tr("sign_up"),
@@ -163,8 +169,10 @@ class UserInfoWidget extends StatelessWidget {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content:
-                                Text(context.tr("please_select_birth_date"))),
+                          content: Text(
+                            context.tr("please_select_birth_date"),
+                          ),
+                        ),
                       );
                     }
                   },

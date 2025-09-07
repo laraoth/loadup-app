@@ -30,6 +30,8 @@ import 'package:loadup/features/my_shipping/presentation/screens/pending_shipmen
 import 'package:loadup/features/my_shipping/presentation/screens/received_shipment_details_screen.dart';
 import 'package:loadup/features/my_shipping/presentation/screens/received_shipments_screen.dart';
 import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
+import 'package:loadup/features/payment/logic/cubit/payments_cubit.dart';
+import 'package:loadup/features/payment/presentation/screens/payments_screen.dart';
 import 'package:loadup/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:loadup/features/profile/presentation/screens/profile_screen.dart';
 import 'package:loadup/features/get_started/presentation/screens/get_started_screen.dart';
@@ -41,10 +43,9 @@ import 'package:loadup/features/reset_password/logic/cubit/reset_password_cubit.
 import 'package:loadup/features/reset_password/presentation/screens/reset_password_screen.dart';
 import 'package:loadup/features/settings/presentation/screens/settings_screen.dart';
 import 'package:loadup/features/shipment_details/logic/cubit/checkpoints_cubit.dart';
+import 'package:loadup/features/shipment_details/presentation/screens/checkpoints_screen.dart';
 import 'package:loadup/features/shipment_details/presentation/screens/map_screen.dart';
 import 'package:loadup/features/shipment_details/presentation/screens/shipment_details_screen.dart';
-import 'package:loadup/features/wallet/logic/cubit/payment_cubit.dart';
-import 'package:loadup/features/wallet/presentation/screens/wallet_screen.dart';
 
 import '../public_widgets/custom_bottom_navigation_bar.dart';
 
@@ -56,13 +57,22 @@ class AppRouter {
           builder: (_) => GetStartedScreen(),
         );
 
-      case Routes.mapScreen:
+      // case Routes.mapScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider(
+      //       create: (context) => getIt<CheckpointsCubit>(),
+      //       child: const MapScreen(),
+      //     ),
+      //   );
+      case Routes.checkpointsScreen:
+        final groupId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<CheckpointsCubit>(),
-            child: const MapScreen(),
+            child: CheckpointsScreen(groupId: groupId),
           ),
         );
+
       case Routes.loginScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -79,7 +89,7 @@ class AppRouter {
         );
       case Routes.homeScreen:
         return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => HomeScreen(),
         );
 
       case Routes.profileScreen:
@@ -130,11 +140,17 @@ class AppRouter {
           ),
         );
 
-      case Routes.walletScreen:
+      case Routes.myPaymentsScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<PaymentsCubit>(),
-            child: const WalletScreen(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                  create: (_) => getIt<PaymentsCubit>()..fetchPayments()),
+              BlocProvider(
+                  create: (_) =>
+                      getIt<PendingShipmentsCubit>()..getPendingShipments()),
+            ],
+            child: MyPaymentsScreen(),
           ),
         );
 
@@ -264,7 +280,8 @@ class AppRouter {
       case Routes.pendingShipmentsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<PendingShipmentsCubit>(),
+            create: (_) =>
+                getIt<PendingShipmentsCubit>()..getPendingShipments(),
             child: const PendingShipmentsScreen(),
           ),
         );

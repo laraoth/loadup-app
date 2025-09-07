@@ -1,24 +1,17 @@
-part of 'checkpoints_cubit.dart';
+import 'package:loadup/features/shipment_details/data/models/checkpoints_model.dart';
 
-abstract class CheckpointsState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+abstract class CheckpointsState {}
 
 class CheckpointsInitial extends CheckpointsState {}
 
 class CheckpointsLoading extends CheckpointsState {}
 
 class CheckpointsSuccess extends CheckpointsState {
-  final CheckpointsModel checkpoints;
-  CheckpointsSuccess(this.checkpoints);
-  @override
-  List<Object?> get props => [checkpoints];
+  final CheckpointsModel checkpointsModel;
+  CheckpointsSuccess(this.checkpointsModel);
 }
 
 class CheckpointsError extends CheckpointsState {
   final String error;
   CheckpointsError(this.error);
-  @override
-  List<Object?> get props => [error];
 }

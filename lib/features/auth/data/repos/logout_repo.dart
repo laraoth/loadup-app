@@ -4,7 +4,7 @@ import 'package:loadup/core/networking/error/failure.dart';
 import 'package:loadup/core/networking/network_info.dart';
 import 'package:loadup/features/auth/data/datasources/logout_remote_data_source.dart';
 import 'package:loadup/features/auth/data/models/LogoutResponse.dart';
-import 'package:loadup/main.dart'; // لو هنا بتخزن التوكن أو بيانات أخرى
+import 'package:loadup/main.dart';
 
 class LogoutRepo {
   final LogoutRemoteDataSource logoutRemoteDataSource;

@@ -127,7 +127,6 @@ class ComplaintsListWidget extends StatelessWidget {
                                   },
                                 ),
 
-                                /// زر الحذف
                                 IconButton(
                                   icon: const Icon(Icons.delete,
                                       size: 20, color: Colors.red),

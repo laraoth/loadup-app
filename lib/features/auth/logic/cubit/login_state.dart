@@ -13,3 +13,10 @@ class LoginError extends LoginState {
   final String error;
   LoginError(this.error);
 }
+
+class LoginAuthenticated extends LoginState {
+  final String token;
+  LoginAuthenticated(this.token);
+}
+
+class LoginUnauthenticated extends LoginState {}

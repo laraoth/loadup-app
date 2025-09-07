@@ -5,7 +5,14 @@ import 'package:loadup/features/create_shipment/data/models/users_model.dart';
 import 'package:loadup/main.dart';
 
 abstract class UsersRemoteDataSource {
-  Future<UsersModel> getusers({int page = 1});
+  Future<UsersModel> getusers({
+    int page,
+    int perPage,
+    String? search,
+    String? role,
+    String? sortBy,
+    String? sortOrder,
+  });
 }
 
 class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
@@ -14,18 +21,24 @@ class UsersRemoteDataSourceImp implements UsersRemoteDataSource {
   UsersRemoteDataSourceImp({required this.dio});
 
   @override
-  @override
-  Future<UsersModel> getusers({int page = 1}) async {
+  Future<UsersModel> getusers({
+    int page = 1,
+    int perPage = 5,
+    String? search,
+    String? role = "customer",
+    String? sortBy = "created_at",
+    String? sortOrder = "desc",
+  }) async {
     final result = await dio.dioGetMethod(
       endPoint: AppLinkUrl.getusers,
       token: storage.getString('token'),
       queryParameters: {
         "page": page,
-        "per_page": 5,
-        "search": "",
-        "role": "customer",
-        "sort_by": "created_at",
-        "sort_order": "desc",
+        "per_page": perPage,
+        if (search != null && search.isNotEmpty) "search": search,
+        if (role != null) "role": role,
+        if (sortBy != null) "sort_by": sortBy,
+        if (sortOrder != null) "sort_order": sortOrder,
       },
     );
 

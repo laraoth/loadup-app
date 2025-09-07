@@ -21,56 +21,80 @@ class _UsersSelectionScreenState extends State<UsersSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text(context.tr('Choose the receiver'))),
-        body: BlocBuilder<UsersCubit, UsersState>(
-          builder: (context, state) {
-            if (state is UsersLoading) {
-              return LoadingWidget();
-            } else if (state is UsersSuccess) {
-              final usersCubit = context.read<UsersCubit>();
-              final List<UserDatum> users = state.usersModel.data;
+    final cubit = context.read<UsersCubit>();
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: users.length,
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemBuilder: (context, index) {
-                        final item = users[index];
-                        return ListTile(
-                          title: Text(item.name),
-                          onTap: () {
-                            Navigator.pop(context, item);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      appBar: AppBar(title: Text(context.tr('Choose the receiver'))),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: cubit.searchController,
+              decoration: InputDecoration(
+                hintText: context.tr("Search users..."),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    cubit.searchUsers(cubit.searchController.text.trim());
+                  },
+                ),
+              ),
+              onSubmitted: (value) {
+                cubit.searchUsers(value.trim());
+              },
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<UsersCubit, UsersState>(
+              builder: (context, state) {
+                if (state is UsersLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is UsersSuccess) {
+                  final users = state.usersModel.data;
+
+                  return Column(
                     children: [
-                      TextButton(
-                        onPressed: usersCubit.currentPage > 1
-                            ? () => usersCubit.previousPage()
-                            : null,
-                        child: Text(context.tr("Previous")),
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: users!.length,
+                          separatorBuilder: (_, __) => const Divider(),
+                          itemBuilder: (context, index) {
+                            final item = users[index];
+                            return ListTile(
+                              title: Text(item.name ?? ''),
+                              onTap: () => Navigator.pop(context, item),
+                            );
+                          },
+                        ),
                       ),
-                      Text(context.tr("page ${usersCubit.currentPage}")),
-                      TextButton(
-                        onPressed: () => usersCubit.nextPage(),
-                        child: Text(context.tr("next")),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: cubit.currentPage > 1
+                                ? cubit.previousPage
+                                : null,
+                            child: Text(context.tr("Previous")),
+                          ),
+                          Text(context.tr("Page ${cubit.currentPage}")),
+                          TextButton(
+                            onPressed: cubit.nextPage,
+                            child: Text(context.tr("Next")),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                ],
-              );
-            } else if (state is UsersError) {
-              return Center(child: Text(state.error));
-            }
-            return const SizedBox.shrink();
-          },
-        ));
+                  );
+                } else if (state is UsersError) {
+                  return Center(child: Text(state.error));
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

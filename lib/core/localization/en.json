@@ -98,7 +98,7 @@
   "next": "Next",
   "page": "Page",
 
-  "home": "Home",
+  "home_page": "Home Page",
   "hello": "Hello,",
   "user": "User",
     "search": "Search",
@@ -125,6 +125,16 @@
 "transaction_history":"Transaction History",
   "my_shipping": "My Shipping",
   "payments": "Payments",
-  "profile": "Profile"
+  "profile": "Profile",
+"pending_shipments": "Pending Shipments",
+"all": "All",
+"pending admin approval": "Pending Admin Approval",
+"rejected by admin": "Rejected by Admin",
+"priced by admin": "Priced by Admin",
+"pending customer approval": "Pending Customer Approval",
+"rejected by customer": "Rejected by Customer",
+"pending payment": "Pending Payment",
+"paid": "Paid",
+"your_shipment_will_be_on_its_way_soon.":"Your shipment will be on its way soon."
 
 }

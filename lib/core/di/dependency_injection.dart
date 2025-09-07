@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loadup/core/networking/crud_dio.dart';
@@ -49,8 +50,11 @@ import 'package:loadup/features/my_shipping/logic/cubit/pending_shipments_cubit.
 import 'package:loadup/features/my_shipping/logic/cubit/received_shipments_cubit.dart';
 import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dart';
 import 'package:loadup/features/payment/data/datasources/create_payment_remote_data_source.dart';
+import 'package:loadup/features/payment/data/datasources/payments_remote_data_source.dart';
 import 'package:loadup/features/payment/data/repos/create_payment_repo.dart';
+import 'package:loadup/features/payment/data/repos/payments_repo.dart';
 import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
+import 'package:loadup/features/payment/logic/cubit/payments_cubit.dart';
 import 'package:loadup/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:loadup/features/profile/data/repos/profile_repo.dart';
 import 'package:loadup/features/profile/logic/cubit/profile_cubit.dart';
@@ -60,23 +64,18 @@ import 'package:loadup/features/reset_password/logic/cubit/reset_password_cubit.
 import 'package:loadup/features/shipment_details/data/datasources/checkpoints_remote_data_source.dart';
 import 'package:loadup/features/shipment_details/data/repos/checkpoints_repo.dart';
 import 'package:loadup/features/shipment_details/logic/cubit/checkpoints_cubit.dart';
-import 'package:loadup/features/wallet/data/datasources/payment_remote_data_source.dart';
-import 'package:loadup/features/wallet/data/repos/payment_repo.dart';
-import 'package:loadup/features/wallet/logic/cubit/payment_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setupGetit() async {
-  //! feature - login
+  getIt.registerLazySingleton(() => FirebaseMessaging.instance);
 
-  // cubit
   getIt.registerFactory<LoginCubit>(
     () => LoginCubit(getIt()),
   );
   getIt.registerFactory<SignUpCubit>(() => SignUpCubit(getIt()));
 
-  //repo
   getIt.registerLazySingleton<LoginRepo>(
     () => LoginRepo(networkInfo: getIt(), loginRemoteDataSource: getIt()),
   );
@@ -84,7 +83,7 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<SignUpRepo>(
     () => SignUpRepo(networkInfo: getIt(), signupRemoteDataSource: getIt()),
   );
-  //data source
+
   getIt.registerLazySingleton<LoginRemoteDataSource>(
     () => LoginRemoteDataSourceImp(dio: getIt()),
   );
@@ -92,15 +91,12 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<SignUpRemoteDataSource>(
     () => SignUpRemoteDataSourceImp(dio: getIt()),
   );
-  //! Core
 
   getIt.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImp(internetConnectionChecker: getIt()),
   );
 
   getIt.registerLazySingleton(() => CrudDio());
-
-  //! External
 
   final sharedPreference = await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreference);
@@ -305,7 +301,7 @@ Future<void> setupGetit() async {
   getIt.registerLazySingleton<PaymentsRepo>(
     () => PaymentsRepo(
       networkInfo: getIt(),
-      remoteDataSource: getIt(),
+      paymentsremoteDataSource: getIt(),
     ),
   );
 

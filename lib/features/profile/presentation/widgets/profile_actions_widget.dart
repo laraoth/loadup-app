@@ -21,12 +21,12 @@ class ProfileActionsWidget extends StatelessWidget {
           context.pushNamed(Routes.editprofileScreen);
         }
       },
-      {
-        'title': context.tr("change_password"),
-        'onTap': () {
-          context.pushNamed(Routes.resetpasswordScreen);
-        }
-      },
+      // {
+      //   'title': context.tr("change_password"),
+      //   'onTap': () {
+      //     context.pushNamed(Routes.resetpasswordScreen);
+      //   }
+      // },
       {
         'title': context.tr("complaints"),
         'onTap': () {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "624608240138",
+    "project_id": "loadup-app-decee",
+    "storage_bucket": "loadup-app-decee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624608240138:android:f1fd9692bb0c1c6e9935f3",
+        "android_client_info": {
+          "package_name": "com.example.loadup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7cxT7eLlR4uqjmD9y6AsUSlyfpNWc0DE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

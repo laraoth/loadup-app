@@ -61,7 +61,7 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
 
               if (selected != null) {
                 usersCubit.selectedReciverId = selected.id;
-                usersCubit.recieverController.text = selected.name;
+                usersCubit.recieverController.text = selected.name ?? '';
                 shipmentCubit.selectedReceiverId = selected.id;
               }
             },
@@ -131,8 +131,6 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
           ),
           verticalSpace(24),
 
-// مركز الانطلاق
-          // مركز الانطلاق
           GestureDetector(
             onTap: () async {
               if (shipmentCubit.selectedOriginGovernorateId == null) {
@@ -171,7 +169,6 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
 
           verticalSpace(24),
 
-// مركز الوجهة
           GestureDetector(
             onTap: () async {
               if (shipmentCubit.selectedDestinationGovernorateId == null) {
@@ -212,7 +209,6 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
 
           verticalSpace(24),
 
-          /// باقي الحقول
           TextFieldWidget(
             controller: shipmentCubit.originAddressController,
             hintText: context.tr('origin_address'),
@@ -232,10 +228,11 @@ class SenderAndRecipientInfoShipmentDetailsWidget extends StatelessWidget {
             hintText: context.tr('special_instructions'),
             labelText: context.tr('special_instructions'),
             obscureText: false,
+            validator: (_) => null,
           ),
+
           verticalSpace(40),
 
-          /// زر التأكيد
           ButtonWidget(
             title: context.tr("confirm"),
             onTap: () {

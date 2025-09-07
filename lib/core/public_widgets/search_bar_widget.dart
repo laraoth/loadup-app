@@ -8,10 +8,10 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppColors.cardBackground(context); // خلفية ديناميكية
+    final bgColor = AppColors.cardBackground(context);
     final shadowColor = Theme.of(context).brightness == Brightness.light
         ? Colors.black12
-        : Colors.black54; // شادو أوضح في الداكن
+        : Colors.black54;
     final iconColor = AppColors.icon(context);
 
     return Container(

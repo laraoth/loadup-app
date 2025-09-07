@@ -35,7 +35,6 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// --- معلومات أساسية ---
             DetailItemWidget(
               title: context.tr("shipment_id"),
               value: shipment.id.toString(),
@@ -70,10 +69,7 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
               title: context.tr("created_at"),
               value: shipment.createdAt.toString(),
             ),
-
             verticalSpace(16),
-
-            /// --- العناوين ---
             DetailItemWidget(
               title: context.tr("origin_address"),
               value: shipment.originAddress ?? '',
@@ -98,10 +94,7 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
               title: context.tr("destination_center"),
               value: shipment.destinationCenter?.name ?? '',
             ),
-
             verticalSpace(16),
-
-            /// --- بيانات المرسل ---
             Center(
               child: Text(context.tr("sender"),
                   style: AppTextStyles.font16Bold(context)),
@@ -123,10 +116,7 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
               title: context.tr("address"),
               value: shipment.sender?.address ?? '',
             ),
-
             verticalSpace(16),
-
-            /// --- بيانات المستلم ---
             Center(
               child: Text(context.tr("receiver"),
                   style: AppTextStyles.font16Bold(context)),
@@ -148,10 +138,7 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
               title: context.tr("address"),
               value: shipment.receiver?.address ?? '',
             ),
-
             verticalSpace(20),
-
-            /// --- QR Code ---
             Center(
               child: QrImageView(
                 data: qrRawString,
@@ -160,10 +147,7 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
               ),
             ),
-
             verticalSpace(20),
-
-            /// --- زر الخريطة ---
             Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -180,7 +164,18 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    context.pushNamed(Routes.mapScreen);
+                    if (shipment.groupId != null) {
+                      context.pushNamed(
+                        Routes.checkpointsScreen,
+                        arguments: shipment.groupId,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(context
+                                .tr("your_shipment_will_be_on_its_way_soon."))),
+                      );
+                    }
                   },
                   icon: Icon(
                     Icons.location_pin,
@@ -190,7 +185,6 @@ class ReceivedShipmentDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             verticalSpace(20),
           ],
         ),

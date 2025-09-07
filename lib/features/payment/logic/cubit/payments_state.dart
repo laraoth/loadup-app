@@ -1,5 +1,6 @@
+// payment_state.dart
 import 'package:equatable/equatable.dart';
-import 'package:loadup/features/wallet/data/models/payment_model.dart';
+import '../../data/models/payments_model.dart';
 
 abstract class PaymentsState extends Equatable {
   @override
@@ -12,6 +13,7 @@ class PaymentsLoading extends PaymentsState {}
 
 class PaymentsSuccess extends PaymentsState {
   final PaymentsModel payments;
+
   PaymentsSuccess(this.payments);
 
   @override
@@ -20,6 +22,7 @@ class PaymentsSuccess extends PaymentsState {
 
 class PaymentsError extends PaymentsState {
   final String error;
+
   PaymentsError(this.error);
 
   @override

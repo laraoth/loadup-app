@@ -98,7 +98,7 @@
   "next": "التالي",
   "page": "صفحة",
 
-  "home": "الرئيسية",
+  "home_page": "الصفحة الرئيسية",
   "hello": "مرحباً،",
   "user": "المستخدم",
    "search": "البحث",
@@ -125,7 +125,17 @@
 "transaction_history":"سجل المعاملات",
   "my_shipping": "شحناتي",
   "payments": "المدفوعات",
-  "profile": "حسابي"
+  "profile": "حسابي",
+"pending_shipments":"شحنات بانتظار الدفع",
+"all": "الكل",
+"pending admin approval": "بانتظار موافقة الإدارة",
+"rejected by admin": "مرفوض من الإدارة",
+"priced by admin": "مُسعر من الإدارة",
+"pending customer approval": "بانتظار موافقة العميل",
+"rejected by customer": "مرفوض من العميل",
+"pending payment": "بانتظار الدفع",
+"paid": "مدفوع",
+"your_shipment_will_be_on_its_way_soon.":"شحنتك ستكون في طريقها قريبًا."
 
 
 }

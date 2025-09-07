@@ -16,10 +16,24 @@ class UsersRepo {
     required this.networkInfo,
   });
 
-  Future<Either<Failure, UsersModel>> getusers({int page = 1}) async {
+  Future<Either<Failure, UsersModel>> getusers({
+    int page = 1,
+    int perPage = 5,
+    String? search,
+    String? role,
+    String? sortBy,
+    String? sortOrder,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final usersresponse = await usersRemoteDataSource.getusers(page: page);
+        final usersresponse = await usersRemoteDataSource.getusers(
+          page: page,
+          perPage: perPage,
+          search: search,
+          role: role,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+        );
         return Right(usersresponse);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));

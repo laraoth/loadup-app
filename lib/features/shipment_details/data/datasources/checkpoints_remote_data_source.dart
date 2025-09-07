@@ -5,25 +5,31 @@ import 'package:loadup/features/shipment_details/data/models/checkpoints_model.d
 import 'package:loadup/main.dart';
 
 abstract class CheckpointsRemoteDataSource {
-  Future<CheckpointsModel> getCheckpoints({int page, int perPage});
+  Future<CheckpointsModel> getCheckpoints({
+    int page,
+    int perPage,
+    required int groupId,
+  });
 }
 
 class CheckpointsRemoteDataSourceImp implements CheckpointsRemoteDataSource {
   final CrudDio dio;
+
   CheckpointsRemoteDataSourceImp({required this.dio});
 
   @override
-  Future<CheckpointsModel> getCheckpoints(
-      {int page = 1, int perPage = 10}) async {
+  Future<CheckpointsModel> getCheckpoints({
+    int page = 1,
+    int perPage = 10,
+    required int groupId,
+  }) async {
     final result = await dio.dioGetMethod(
-      endPoint: AppLinkUrl.getCheckpoints,
+      endPoint: "${AppLinkUrl.groupTrackings}/group/$groupId/checkpoints",
       token: storage.getString('token'),
       queryParameters: {
         "page": page,
         "per_page": perPage,
-        "search": "",
-        "governorate_id": "",
-        "sort_by": "created_at",
+        "sort_by": "arrival_time",
         "sort_order": "desc",
       },
     );

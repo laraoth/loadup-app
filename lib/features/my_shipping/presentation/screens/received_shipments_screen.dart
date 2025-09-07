@@ -71,8 +71,8 @@ class _ReceivedShipmentsScreenState extends State<ReceivedShipmentsScreen> {
                   style: AppTextStyles.font24Bold(context),
                 ),
               ),
-              verticalSpace(20),
-              SearchBarWidget(),
+              // verticalSpace(20),
+              // SearchBarWidget(),
               verticalSpace(30),
               ShippingFilterTabsWidget(
                 selectedIndex: selectedTabIndex,

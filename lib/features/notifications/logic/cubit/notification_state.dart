@@ -1,10 +1,10 @@
-part of 'notification_cubit.dart';
+// part of 'notification_cubit.dart';
 
-sealed class NotificationState extends Equatable {
-  const NotificationState();
+// sealed class NotificationState extends Equatable {
+//   const NotificationState();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-final class NotificationInitial extends NotificationState {}
+// final class NotificationInitial extends NotificationState {}
