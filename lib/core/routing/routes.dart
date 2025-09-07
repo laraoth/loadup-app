@@ -28,4 +28,5 @@ class Routes {
   static const String pendingShipmentsScreen = '/pendingShipmentsScreen';
   static const String checkpointsScreen = '/checkpointsScreen';
   static const String myPaymentsScreen = '/myPaymentsScreen';
+  static const String notificationsScreen = '/notificationsScreen';
 }

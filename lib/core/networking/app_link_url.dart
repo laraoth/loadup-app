@@ -1,7 +1,7 @@
 class AppLinkUrl {
+  static const String baseUrl = "https://c731539d18a8.ngrok-free.app";
   // static const String baseUrl = 'http://10.0.2.2:8000';
   // static const String baseUrl = 'http://192.168.189.1:8000';
-  static const String baseUrl = "https://c30db6470741.ngrok-free.app";
   // static const String baseUrl = 'http://10.150.210.52:8000';
   static const String login = '/api/login';
   static const String signup = '/api/register';

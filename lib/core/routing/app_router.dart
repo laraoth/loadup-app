@@ -29,6 +29,7 @@ import 'package:loadup/features/my_shipping/logic/cubit/sent_shipments_cubit.dar
 import 'package:loadup/features/my_shipping/presentation/screens/pending_shipments_screen.dart';
 import 'package:loadup/features/my_shipping/presentation/screens/received_shipment_details_screen.dart';
 import 'package:loadup/features/my_shipping/presentation/screens/received_shipments_screen.dart';
+import 'package:loadup/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:loadup/features/payment/logic/cubit/create_payment_cubit.dart';
 import 'package:loadup/features/payment/logic/cubit/payments_cubit.dart';
 import 'package:loadup/features/payment/presentation/screens/payments_screen.dart';
@@ -56,7 +57,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => GetStartedScreen(),
         );
-
+      // case Routes.notificationsScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => NotificationsPage(),
+      //   );
       // case Routes.mapScreen:
       //   return MaterialPageRoute(
       //     builder: (_) => BlocProvider(
